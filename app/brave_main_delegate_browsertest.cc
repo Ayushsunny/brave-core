@@ -84,6 +84,7 @@ IN_PROC_BROWSER_TEST_F(BraveMainDelegateBrowserTest, DisabledFeatures) {
       &kEnableProfilePickerOnStartupFeature,
       &kSharingQRCodeGenerator,
       &net::features::kFirstPartySets,
+      &network::features::kTrustTokens,
       &network_time::kNetworkTimeServiceQuerying,
   };
 
