@@ -7,6 +7,7 @@
 #define BRAVE_VENDOR_BAT_NATIVE_ADS_INCLUDE_BAT_ADS_BRAVE_TODAY_AD_INFO_H_
 
 #include <string>
+#include <vector>
 
 #include "bat/ads/ad_info.h"
 #include "bat/ads/export.h"
@@ -29,6 +30,8 @@ struct ADS_EXPORT BraveTodayAdInfo : AdInfo {
   std::string image_url;
   std::string size;
 };
+
+using BraveTodayAdList = std::vector<BraveTodayAdInfo>;
 
 }  // namespace ads
 

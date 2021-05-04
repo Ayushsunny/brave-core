@@ -79,6 +79,7 @@ AdsImpl::~AdsImpl() {
   conversions_->RemoveObserver(this);
   new_tab_page_ad_->RemoveObserver(this);
   promoted_content_ad_->RemoveObserver(this);
+  brave_today_ad_->RemoveObserver(this);
 }
 
 void AdsImpl::set_for_testing(
@@ -310,6 +311,10 @@ void AdsImpl::OnPromotedContentAdEvent(
     const std::string& creative_instance_id,
     const PromotedContentAdEventType event_type) {
   promoted_content_ad_->FireEvent(uuid, creative_instance_id, event_type);
+}
+
+void AdsImpl::GetBraveTodayAds(const std::vector<std::string>& sizes,
+                               GetBraveTodayAdsCallback callback) {
 }
 
 void AdsImpl::OnBraveTodayAdEvent(const std::string& uuid,

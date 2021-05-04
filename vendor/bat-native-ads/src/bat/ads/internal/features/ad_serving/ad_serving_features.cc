@@ -44,6 +44,13 @@ const char kFieldTrialParameterMaximumPromotedContentAdsPerDay[] =
     "maximum_promoted_content_ads_per_day";
 const int kDefaultMaximumPromotedContentAdsPerDay = 20;
 
+const char kFieldTrialParameterBrowsingHistoryMaxCount[] =
+    "browsing_history_max_count";
+const int kDefaultBrowsingHistoryMaxCount = 5000;
+const char kFieldTrialParameterBrowsingHistoryDaysAgo[] =
+    "browsing_history_days_ago";
+const int kDefaultBrowsingHistoryDaysAgo = 180;
+
 }  // namespace
 
 const base::Feature kAdServing{kFeatureName, base::FEATURE_ENABLED_BY_DEFAULT};
@@ -98,6 +105,18 @@ int GetMaximumPromotedContentAdsPerDay() {
   return GetFieldTrialParamByFeatureAsInt(
       kAdServing, kFieldTrialParameterMaximumPromotedContentAdsPerDay,
       kDefaultMaximumPromotedContentAdsPerDay);
+}
+
+int GetBrowsingHistoryMaxCount() {
+  return GetFieldTrialParamByFeatureAsInt(
+      kAdServing, kFieldTrialParameterBrowsingHistoryMaxCount,
+      kDefaultBrowsingHistoryMaxCount);
+}
+
+int GetBrowsingHistoryDaysAgo() {
+  return GetFieldTrialParamByFeatureAsInt(
+      kAdServing, kFieldTrialParameterBrowsingHistoryDaysAgo,
+      kDefaultBrowsingHistoryDaysAgo);
 }
 
 }  // namespace features

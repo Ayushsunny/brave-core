@@ -27,6 +27,9 @@ int GetMaximumNewTabPageAdsPerDay();
 int GetMaximumPromotedContentAdsPerHour();
 int GetMaximumPromotedContentAdsPerDay();
 
+int GetBrowsingHistoryMaxCount();
+int GetBrowsingHistoryDaysAgo();
+
 }  // namespace features
 }  // namespace ads
 

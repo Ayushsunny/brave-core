@@ -23,7 +23,8 @@ bool BraveTodayAdInfo::IsValid() const {
     return false;
   }
 
-  if (title.empty() || description.empty()) {
+  if (title.empty() || description.empty() || image_url.empty() ||
+      size.empty()) {
     return false;
   }
 

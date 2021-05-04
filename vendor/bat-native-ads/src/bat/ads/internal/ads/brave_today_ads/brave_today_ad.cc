@@ -86,20 +86,20 @@ void BraveTodayAd::FireEvent(const std::string& uuid,
 
 ///////////////////////////////////////////////////////////////////////////////
 
-bool BraveTodayAd::ShouldFireEvent(const BraveTodayAdInfo& ad,
-                                   const AdEventList& ad_events) {
-  brave_today_ads::FrequencyCapping frequency_capping(ad_events);
+// bool BraveTodayAd::ShouldFireEvent(const BraveTodayAdInfo& ad,
+//                                    const AdEventList& ad_events) {
+//   brave_today_ads::FrequencyCapping frequency_capping(ad_events);
 
-  if (!frequency_capping.IsAdAllowed()) {
-    return false;
-  }
+//   if (!frequency_capping.IsAdAllowed()) {
+//     return false;
+//   }
 
-  if (frequency_capping.ShouldExcludeAd(ad)) {
-    return false;
-  }
+//   if (frequency_capping.ShouldExcludeAd(ad)) {
+//     return false;
+//   }
 
-  return true;
-}
+//   return true;
+// }
 
 void BraveTodayAd::FireEvent(const BraveTodayAdInfo& ad,
                              const std::string& uuid,
@@ -115,14 +115,15 @@ void BraveTodayAd::FireEvent(const BraveTodayAdInfo& ad,
       return;
     }
 
-    if (event_type == BraveTodayAdEventType::kViewed &&
-        !ShouldFireEvent(ad, ad_events)) {
-      BLOG(1, "Brave Today ad: Not allowed");
+    // TODO(tmancey): Move this check to the frequency cap
+    // if (event_type == BraveTodayAdEventType::kViewed &&
+    //     !ShouldFireEvent(ad, ad_events)) {
+    //   BLOG(1, "Brave Today ad: Not allowed");
 
-      NotifyBraveTodayAdEventFailed(uuid, creative_instance_id, event_type);
+    //   NotifyBraveTodayAdEventFailed(uuid, creative_instance_id, event_type);
 
-      return;
-    }
+    //   return;
+    // }
 
     const auto ad_event = brave_today_ads::AdEventFactory::Build(event_type);
     ad_event->FireEvent(ad);

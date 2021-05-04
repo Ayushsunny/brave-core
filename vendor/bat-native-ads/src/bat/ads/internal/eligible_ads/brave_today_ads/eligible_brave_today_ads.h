@@ -3,12 +3,14 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef BRAVE_VENDOR_BAT_NATIVE_ADS_SRC_BAT_ADS_INTERNAL_ELIGIBLE_ADS_AD_NOTIFICATIONS_ELIGIBLE_AD_NOTIFICATIONS_H_
-#define BRAVE_VENDOR_BAT_NATIVE_ADS_SRC_BAT_ADS_INTERNAL_ELIGIBLE_ADS_AD_NOTIFICATIONS_ELIGIBLE_AD_NOTIFICATIONS_H_
+#ifndef BRAVE_VENDOR_BAT_NATIVE_ADS_SRC_BAT_ADS_INTERNAL_ELIGIBLE_ADS_BRAVE_TODAY_ADS_ELIGIBLE_BRAVE_TODAY_ADS_H_
+#define BRAVE_VENDOR_BAT_NATIVE_ADS_SRC_BAT_ADS_INTERNAL_ELIGIBLE_ADS_BRAVE_TODAY_ADS_ELIGIBLE_BRAVE_TODAY_ADS_H_
+
+#include <string>
 
 #include "bat/ads/internal/ad_events/ad_event_info.h"
 #include "bat/ads/internal/ad_targeting/ad_targeting_segment.h"
-#include "bat/ads/internal/bundle/creative_ad_notification_info.h"
+#include "bat/ads/internal/bundle/creative_brave_today_ad_info.h"
 #include "bat/ads/internal/frequency_capping/frequency_capping_aliases.h"
 
 namespace ads {
@@ -23,10 +25,10 @@ namespace resource {
 class AntiTargeting;
 }  // namespace resource
 
-namespace ad_notifications {
+namespace brave_today_ads {
 
 using GetEligibleAdsCallback =
-    std::function<void(const bool, const CreativeAdNotificationList&)>;
+    std::function<void(const bool, const CreativeBraveTodayAdList&)>;
 
 class EligibleAds {
  public:
@@ -39,6 +41,7 @@ class EligibleAds {
   void SetLastServedAd(const CreativeAdInfo& creative_ad);
 
   void GetForSegments(const SegmentList& segments,
+                      const std::string& size,
                       GetEligibleAdsCallback callback);
 
  private:
@@ -50,32 +53,35 @@ class EligibleAds {
   CreativeAdInfo last_served_creative_ad_;
 
   void GetForParentChildSegments(const SegmentList& segments,
+                                 const std::string& size,
                                  const AdEventList& ad_events,
                                  const BrowsingHistoryList& history,
                                  GetEligibleAdsCallback callback) const;
 
   void GetForParentSegments(const SegmentList& segments,
+                            const std::string& size,
                             const AdEventList& ad_events,
                             const BrowsingHistoryList& history,
                             GetEligibleAdsCallback callback) const;
 
-  void GetForUntargeted(const AdEventList& ad_events,
+  void GetForUntargeted(const std::string& size,
+                        const AdEventList& ad_events,
                         const BrowsingHistoryList& history,
                         GetEligibleAdsCallback callback) const;
 
-  CreativeAdNotificationList FilterIneligibleAds(
-      const CreativeAdNotificationList& ads,
+  CreativeBraveTodayAdList FilterIneligibleAds(
+      const CreativeBraveTodayAdList& ads,
       const AdEventList& ad_events,
       const BrowsingHistoryList& history) const;
 
-  CreativeAdNotificationList ApplyFrequencyCapping(
-      const CreativeAdNotificationList& ads,
+  CreativeBraveTodayAdList ApplyFrequencyCapping(
+      const CreativeBraveTodayAdList& ads,
       const CreativeAdInfo& last_served_creative_ad,
       const AdEventList& ad_events,
       const BrowsingHistoryList& history) const;
 };
 
-}  // namespace ad_notifications
+}  // namespace brave_today_ads
 }  // namespace ads
 
-#endif  // BRAVE_VENDOR_BAT_NATIVE_ADS_SRC_BAT_ADS_INTERNAL_ELIGIBLE_ADS_AD_NOTIFICATIONS_ELIGIBLE_AD_NOTIFICATIONS_H_
+#endif  // BRAVE_VENDOR_BAT_NATIVE_ADS_SRC_BAT_ADS_INTERNAL_ELIGIBLE_ADS_BRAVE_TODAY_ADS_ELIGIBLE_BRAVE_TODAY_ADS_H_

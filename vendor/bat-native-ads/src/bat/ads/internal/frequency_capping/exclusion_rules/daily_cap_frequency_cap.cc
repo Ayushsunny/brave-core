@@ -60,7 +60,8 @@ AdEventList DailyCapFrequencyCap::FilterAdEvents(
   const auto iter = std::remove_if(
       filtered_ad_events.begin(), filtered_ad_events.end(),
       [&ad](const AdEventInfo& ad_event) {
-        return ad_event.type != AdType::kAdNotification ||
+        return (ad_event.type != AdType::kAdNotification &&
+                   ad_event.type != AdType::kBraveTodayAd) ||
                ad_event.campaign_id != ad.campaign_id ||
                ad_event.confirmation_type != ConfirmationType::kViewed;
       });

@@ -15,6 +15,7 @@ namespace ads {
 
 struct CreativeBraveTodayAdInfo : CreativeAdInfo {
   CreativeBraveTodayAdInfo();
+  CreativeBraveTodayAdInfo(const CreativeBraveTodayAdInfo& info);
   ~CreativeBraveTodayAdInfo();
 
   bool operator==(const CreativeBraveTodayAdInfo& rhs) const;
@@ -23,6 +24,8 @@ struct CreativeBraveTodayAdInfo : CreativeAdInfo {
 
   std::string title;
   std::string description;
+  std::string image_url;
+  std::string size;
 };
 
 using CreativeBraveTodayAdList = std::vector<CreativeBraveTodayAdInfo>;

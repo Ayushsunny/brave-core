@@ -3,33 +3,32 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "bat/ads/internal/eligible_ads/ad_notifications/eligible_ad_notifications.h"
+#include "bat/ads/internal/eligible_ads/brave_today_ads/eligible_brave_today_ads.h"
 
-#include <string>
 #include <vector>
 
-#include "bat/ads/ad_notification_info.h"
-#include "bat/ads/internal/ad_pacing/ad_notifications/ad_notification_pacing.h"
+#include "bat/ads/brave_today_ad_info.h"
+#include "bat/ads/internal/ad_pacing/brave_today_ads/brave_today_ad_pacing.h"
 #include "bat/ads/internal/ad_serving/ad_targeting/geographic/subdivision/subdivision_targeting.h"
 #include "bat/ads/internal/ad_targeting/ad_targeting_segment_util.h"
 #include "bat/ads/internal/ad_targeting/ad_targeting_values.h"
-#include "bat/ads/internal/ads/ad_notifications/ad_notification_frequency_capping.h"
+#include "bat/ads/internal/ads/brave_today_ads/brave_today_ad_frequency_capping.h"
 #include "bat/ads/internal/ads_client_helper.h"
 #include "bat/ads/internal/client/client.h"
 #include "bat/ads/internal/database/tables/ad_events_database_table.h"
-#include "bat/ads/internal/database/tables/creative_ad_notifications_database_table.h"
-#include "bat/ads/internal/eligible_ads/ad_notifications/seen_ads.h"
-#include "bat/ads/internal/eligible_ads/ad_notifications/seen_advertisers.h"
+#include "bat/ads/internal/database/tables/creative_brave_today_ads_database_table.h"
+// #include "bat/ads/internal/eligible_ads/brave_today_ads/seen_ads.h"
+// #include "bat/ads/internal/eligible_ads/brave_today_ads/seen_advertisers.h"
 #include "bat/ads/internal/features/ad_serving/ad_serving_features.h"
 #include "bat/ads/internal/logging.h"
 #include "bat/ads/internal/resources/frequency_capping/anti_targeting_resource.h"
 
 namespace ads {
-namespace ad_notifications {
+namespace brave_today_ads {
 
 namespace {
 
-bool ShouldCapLastServedAd(const CreativeAdNotificationList& ads) {
+bool ShouldCapLastServedAd(const CreativeBraveTodayAdList& ads) {
   return ads.size() != 1;
 }
 
@@ -51,6 +50,7 @@ void EligibleAds::SetLastServedAd(const CreativeAdInfo& creative_ad) {
 }
 
 void EligibleAds::GetForSegments(const SegmentList& segments,
+                                 const std::string& size,
                                  GetEligibleAdsCallback callback) {
   database::table::AdEvents database_table;
   database_table.GetAll([=](const Result result, const AdEventList& ad_events) {
@@ -74,11 +74,12 @@ void EligibleAds::GetForSegments(const SegmentList& segments,
           }
 
           if (segments.empty()) {
-            GetForUntargeted(ad_events, history, callback);
+            GetForUntargeted(size, ad_events, history, callback);
             return;
           }
 
-          GetForParentChildSegments(segments, ad_events, history, callback);
+          GetForParentChildSegments(segments, size, ad_events, history,
+                                    callback);
         });
   });
 }
@@ -87,6 +88,7 @@ void EligibleAds::GetForSegments(const SegmentList& segments,
 
 void EligibleAds::GetForParentChildSegments(
     const SegmentList& segments,
+    const std::string& size,
     const AdEventList& ad_events,
     const BrowsingHistoryList& history,
     GetEligibleAdsCallback callback) const {
@@ -97,16 +99,16 @@ void EligibleAds::GetForParentChildSegments(
     BLOG(1, "  " << segment);
   }
 
-  database::table::CreativeAdNotifications database_table;
+  database::table::CreativeBraveTodayAds database_table;
   database_table.GetForSegments(
       segments, [=](const Result result, const SegmentList& segments,
-                    const CreativeAdNotificationList& ads) {
-        CreativeAdNotificationList eligible_ads =
+                    const CreativeBraveTodayAdList& ads) {
+        CreativeBraveTodayAdList eligible_ads =
             FilterIneligibleAds(ads, ad_events, history);
 
         if (eligible_ads.empty()) {
           BLOG(1, "No eligible ads for parent-child segments");
-          GetForParentSegments(segments, ad_events, history, callback);
+          GetForParentSegments(segments, size, ad_events, history, callback);
           return;
         }
 
@@ -115,28 +117,32 @@ void EligibleAds::GetForParentChildSegments(
 }
 
 void EligibleAds::GetForParentSegments(const SegmentList& segments,
+                                       const std::string& size,
                                        const AdEventList& ad_events,
                                        const BrowsingHistoryList& history,
                                        GetEligibleAdsCallback callback) const {
   DCHECK(!segments.empty());
 
   const SegmentList parent_segments = GetParentSegments(segments);
+  if (parent_segments == segments) {
+    return;
+  }
 
   BLOG(1, "Get eligible ads for parent segments:");
   for (const auto& parent_segment : parent_segments) {
     BLOG(1, "  " << parent_segment);
   }
 
-  database::table::CreativeAdNotifications database_table;
+  database::table::CreativeBraveTodayAds database_table;
   database_table.GetForSegments(
       parent_segments, [=](const Result result, const SegmentList& segments,
-                           const CreativeAdNotificationList& ads) {
-        CreativeAdNotificationList eligible_ads =
+                           const CreativeBraveTodayAdList& ads) {
+        CreativeBraveTodayAdList eligible_ads =
             FilterIneligibleAds(ads, ad_events, history);
 
         if (eligible_ads.empty()) {
           BLOG(1, "No eligible ads for parent segments");
-          GetForUntargeted(ad_events, history, callback);
+          GetForUntargeted(size, ad_events, history, callback);
           return;
         }
 
@@ -144,18 +150,19 @@ void EligibleAds::GetForParentSegments(const SegmentList& segments,
       });
 }
 
-void EligibleAds::GetForUntargeted(const AdEventList& ad_events,
+void EligibleAds::GetForUntargeted(const std::string& size,
+                                   const AdEventList& ad_events,
                                    const BrowsingHistoryList& history,
                                    GetEligibleAdsCallback callback) const {
   BLOG(1, "Get eligble ads for untargeted segment");
 
   const std::vector<std::string> segments = {ad_targeting::kUntargeted};
 
-  database::table::CreativeAdNotifications database_table;
+  database::table::CreativeBraveTodayAds database_table;
   database_table.GetForSegments(
       segments, [=](const Result result, const SegmentList& segments,
-                    const CreativeAdNotificationList& ads) {
-        CreativeAdNotificationList eligible_ads =
+                    const CreativeBraveTodayAdList& ads) {
+        CreativeBraveTodayAdList eligible_ads =
             FilterIneligibleAds(ads, ad_events, history);
 
         if (eligible_ads.empty()) {
@@ -166,18 +173,20 @@ void EligibleAds::GetForUntargeted(const AdEventList& ad_events,
       });
 }
 
-CreativeAdNotificationList EligibleAds::FilterIneligibleAds(
-    const CreativeAdNotificationList& ads,
+CreativeBraveTodayAdList EligibleAds::FilterIneligibleAds(
+    const CreativeBraveTodayAdList& ads,
     const AdEventList& ad_events,
     const BrowsingHistoryList& history) const {
-  CreativeAdNotificationList eligible_ads = ads;
+  CreativeBraveTodayAdList eligible_ads = ads;
   if (eligible_ads.empty()) {
     return eligible_ads;
   }
 
-  eligible_ads = FilterSeenAdvertisersAndRoundRobinIfNeeded(eligible_ads);
+  // TODO(tmancey): Implement round robin
+  // eligible_ads = FilterSeenAdvertisersAndRoundRobinIfNeeded(eligible_ads);
 
-  FilterSeenAdsAndRoundRobinIfNeeded(eligible_ads);
+  // TODO(tmancey): Implement round robin
+  // eligible_ads = FilterSeenAdsAndRoundRobinIfNeeded(eligible_ads);
 
   eligible_ads = ApplyFrequencyCapping(
       eligible_ads,
@@ -189,12 +198,12 @@ CreativeAdNotificationList EligibleAds::FilterIneligibleAds(
   return eligible_ads;
 }
 
-CreativeAdNotificationList EligibleAds::ApplyFrequencyCapping(
-    const CreativeAdNotificationList& ads,
+CreativeBraveTodayAdList EligibleAds::ApplyFrequencyCapping(
+    const CreativeBraveTodayAdList& ads,
     const CreativeAdInfo& last_served_creative_ad,
     const AdEventList& ad_events,
     const BrowsingHistoryList& history) const {
-  CreativeAdNotificationList eligible_ads = ads;
+  CreativeBraveTodayAdList eligible_ads = ads;
 
   FrequencyCapping frequency_capping(
       subdivision_targeting_, anti_targeting_resource_, ad_events, history);
@@ -212,5 +221,5 @@ CreativeAdNotificationList EligibleAds::ApplyFrequencyCapping(
   return eligible_ads;
 }
 
-}  // namespace ad_notifications
+}  // namespace brave_today_ads
 }  // namespace ads

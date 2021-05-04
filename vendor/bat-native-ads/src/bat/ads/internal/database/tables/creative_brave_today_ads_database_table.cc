@@ -94,9 +94,9 @@ void CreativeBraveTodayAds::GetForCreativeInstanceId(
 
   const std::string query = base::StringPrintf(
       "SELECT "
-      "cpca.creative_instance_id, "
-      "cpca.creative_set_id, "
-      "cpca.campaign_id, "
+      "cbna.creative_instance_id, "
+      "cbna.creative_set_id, "
+      "cbna.campaign_id, "
       "cam.start_at_timestamp, "
       "cam.end_at_timestamp, "
       "cam.daily_cap, "
@@ -111,24 +111,26 @@ void CreativeBraveTodayAds::GetForCreativeInstanceId(
       "s.segment, "
       "gt.geo_target, "
       "ca.target_url, "
-      "cpca.title, "
-      "cpca.description, "
+      "cbna.title, "
+      "cbna.description, "
+      "cbna.image_url, "
+      "cbna.size, "
       "cam.ptr, "
       "dp.dow, "
       "dp.start_minute, "
       "dp.end_minute "
-      "FROM %s AS cpca "
+      "FROM %s AS cbna "
       "INNER JOIN campaigns AS cam "
-      "ON cam.campaign_id = cpca.campaign_id "
+      "ON cam.campaign_id = cbna.campaign_id "
       "INNER JOIN segments AS s "
-      "ON s.creative_set_id = cpca.creative_set_id "
+      "ON s.creative_set_id = cbna.creative_set_id "
       "INNER JOIN creative_ads AS ca "
-      "ON ca.creative_instance_id = cpca.creative_instance_id "
+      "ON ca.creative_instance_id = cbna.creative_instance_id "
       "INNER JOIN geo_targets AS gt "
-      "ON gt.campaign_id = cpca.campaign_id "
+      "ON gt.campaign_id = cbna.campaign_id "
       "INNER JOIN dayparts AS dp "
-      "ON dp.campaign_id = cpca.campaign_id "
-      "WHERE cpca.creative_instance_id = '%s'",
+      "ON dp.campaign_id = cbna.campaign_id "
+      "WHERE cbna.creative_instance_id = '%s'",
       get_table_name().c_str(), creative_instance_id.c_str());
 
   DBCommandPtr command = DBCommand::New();
@@ -155,6 +157,8 @@ void CreativeBraveTodayAds::GetForCreativeInstanceId(
       DBCommand::RecordBindingType::STRING_TYPE,  // target_url
       DBCommand::RecordBindingType::STRING_TYPE,  // title
       DBCommand::RecordBindingType::STRING_TYPE,  // description
+      DBCommand::RecordBindingType::STRING_TYPE,  // image_url
+      DBCommand::RecordBindingType::STRING_TYPE,  // size
       DBCommand::RecordBindingType::DOUBLE_TYPE,  // ptr
       DBCommand::RecordBindingType::STRING_TYPE,  // dayparts->dow
       DBCommand::RecordBindingType::INT_TYPE,     // dayparts->start_minute
@@ -180,9 +184,9 @@ void CreativeBraveTodayAds::GetForSegments(
 
   const std::string query = base::StringPrintf(
       "SELECT "
-      "cpca.creative_instance_id, "
-      "cpca.creative_set_id, "
-      "cpca.campaign_id, "
+      "cbna.creative_instance_id, "
+      "cbna.creative_set_id, "
+      "cbna.campaign_id, "
       "cam.start_at_timestamp, "
       "cam.end_at_timestamp, "
       "cam.daily_cap, "
@@ -197,23 +201,25 @@ void CreativeBraveTodayAds::GetForSegments(
       "s.segment, "
       "gt.geo_target, "
       "ca.target_url, "
-      "cpca.title, "
-      "cpca.description, "
+      "cbna.title, "
+      "cbna.description, "
+      "cbna.image_url, "
+      "cbna.size, "
       "cam.ptr, "
       "dp.dow, "
       "dp.start_minute, "
       "dp.end_minute "
-      "FROM %s AS cpca "
+      "FROM %s AS cbna "
       "INNER JOIN campaigns AS cam "
-      "ON cam.campaign_id = cpca.campaign_id "
+      "ON cam.campaign_id = cbna.campaign_id "
       "INNER JOIN segments AS s "
-      "ON s.creative_set_id = cpca.creative_set_id "
+      "ON s.creative_set_id = cbna.creative_set_id "
       "INNER JOIN creative_ads AS ca "
-      "ON ca.creative_instance_id = cpca.creative_instance_id "
+      "ON ca.creative_instance_id = cbna.creative_instance_id "
       "INNER JOIN geo_targets AS gt "
-      "ON gt.campaign_id = cpca.campaign_id "
+      "ON gt.campaign_id = cbna.campaign_id "
       "INNER JOIN dayparts AS dp "
-      "ON dp.campaign_id = cpca.campaign_id "
+      "ON dp.campaign_id = cbna.campaign_id "
       "WHERE s.segment IN %s "
       "AND %s BETWEEN cam.start_at_timestamp AND cam.end_at_timestamp",
       get_table_name().c_str(),
@@ -250,6 +256,8 @@ void CreativeBraveTodayAds::GetForSegments(
       DBCommand::RecordBindingType::STRING_TYPE,  // target_url
       DBCommand::RecordBindingType::STRING_TYPE,  // title
       DBCommand::RecordBindingType::STRING_TYPE,  // description
+      DBCommand::RecordBindingType::STRING_TYPE,  // image_url
+      DBCommand::RecordBindingType::STRING_TYPE,  // title
       DBCommand::RecordBindingType::DOUBLE_TYPE,  // ptr
       DBCommand::RecordBindingType::STRING_TYPE,  // dayparts->dow
       DBCommand::RecordBindingType::INT_TYPE,     // dayparts->start_minute
@@ -268,9 +276,9 @@ void CreativeBraveTodayAds::GetForSegments(
 void CreativeBraveTodayAds::GetAll(GetCreativeBraveTodayAdsCallback callback) {
   const std::string query = base::StringPrintf(
       "SELECT "
-      "cpca.creative_instance_id, "
-      "cpca.creative_set_id, "
-      "cpca.campaign_id, "
+      "cbna.creative_instance_id, "
+      "cbna.creative_set_id, "
+      "cbna.campaign_id, "
       "cam.start_at_timestamp, "
       "cam.end_at_timestamp, "
       "cam.daily_cap, "
@@ -285,23 +293,25 @@ void CreativeBraveTodayAds::GetAll(GetCreativeBraveTodayAdsCallback callback) {
       "s.segment, "
       "gt.geo_target, "
       "ca.target_url, "
-      "cpca.title, "
-      "cpca.description, "
+      "cbna.title, "
+      "cbna.description, "
+      "cbna.image_url, "
+      "cbna.size, "
       "cam.ptr, "
       "dp.dow, "
       "dp.start_minute, "
       "dp.end_minute "
-      "FROM %s AS cpca "
+      "FROM %s AS cbna "
       "INNER JOIN campaigns AS cam "
-      "ON cam.campaign_id = cpca.campaign_id "
+      "ON cam.campaign_id = cbna.campaign_id "
       "INNER JOIN segments AS s "
-      "ON s.creative_set_id = cpca.creative_set_id "
+      "ON s.creative_set_id = cbna.creative_set_id "
       "INNER JOIN creative_ads AS ca "
-      "ON ca.creative_instance_id = cpca.creative_instance_id "
+      "ON ca.creative_instance_id = cbna.creative_instance_id "
       "INNER JOIN geo_targets AS gt "
-      "ON gt.campaign_id = cpca.campaign_id "
+      "ON gt.campaign_id = cbna.campaign_id "
       "INNER JOIN dayparts AS dp "
-      "ON dp.campaign_id = cpca.campaign_id "
+      "ON dp.campaign_id = cbna.campaign_id "
       "WHERE %s BETWEEN cam.start_at_timestamp AND cam.end_at_timestamp",
       get_table_name().c_str(),
       TimeAsTimestampString(base::Time::Now()).c_str());
@@ -330,6 +340,8 @@ void CreativeBraveTodayAds::GetAll(GetCreativeBraveTodayAdsCallback callback) {
       DBCommand::RecordBindingType::STRING_TYPE,  // target_url
       DBCommand::RecordBindingType::STRING_TYPE,  // title
       DBCommand::RecordBindingType::STRING_TYPE,  // description
+      DBCommand::RecordBindingType::STRING_TYPE,  // image_url
+      DBCommand::RecordBindingType::STRING_TYPE,  // size
       DBCommand::RecordBindingType::DOUBLE_TYPE,  // ptr
       DBCommand::RecordBindingType::STRING_TYPE,  // dayparts->dow
       DBCommand::RecordBindingType::INT_TYPE,     // dayparts->start_minute
@@ -403,6 +415,8 @@ int CreativeBraveTodayAds::BindParameters(
     BindString(command, index++, creative_brave_today_ad.campaign_id);
     BindString(command, index++, creative_brave_today_ad.title);
     BindString(command, index++, creative_brave_today_ad.description);
+    BindString(command, index++, creative_brave_today_ad.image_url);
+    BindString(command, index++, creative_brave_today_ad.size);
 
     count++;
   }
@@ -421,9 +435,11 @@ std::string CreativeBraveTodayAds::BuildInsertOrUpdateQuery(
       "creative_set_id, "
       "campaign_id, "
       "title, "
-      "description) VALUES %s",
+      "description, "
+      "image_url, "
+      "size) VALUES %s",
       get_table_name().c_str(),
-      BuildBindingParameterPlaceholders(5, count).c_str());
+      BuildBindingParameterPlaceholders(7, count).c_str());
 }
 
 void CreativeBraveTodayAds::OnGetForCreativeInstanceId(
@@ -524,12 +540,14 @@ CreativeBraveTodayAdInfo CreativeBraveTodayAds::GetFromRecord(
   creative_brave_today_ad.target_url = ColumnString(record, 16);
   creative_brave_today_ad.title = ColumnString(record, 17);
   creative_brave_today_ad.description = ColumnString(record, 18);
-  creative_brave_today_ad.ptr = ColumnDouble(record, 19);
+  creative_brave_today_ad.image_url = ColumnString(record, 19);
+  creative_brave_today_ad.size = ColumnString(record, 20);
+  creative_brave_today_ad.ptr = ColumnDouble(record, 21);
 
   CreativeDaypartInfo daypart;
-  daypart.dow = ColumnString(record, 20);
-  daypart.start_minute = ColumnInt(record, 21);
-  daypart.end_minute = ColumnInt(record, 22);
+  daypart.dow = ColumnString(record, 22);
+  daypart.start_minute = ColumnInt(record, 23);
+  daypart.end_minute = ColumnInt(record, 24);
   creative_brave_today_ad.dayparts.push_back(daypart);
 
   return creative_brave_today_ad;
@@ -545,7 +563,9 @@ void CreativeBraveTodayAds::CreateTableV14(DBTransaction* transaction) {
       "creative_set_id TEXT NOT NULL, "
       "campaign_id TEXT NOT NULL, "
       "title TEXT NOT NULL, "
-      "description TEXT NOT NULL)",
+      "description TEXT NOT NULL, "
+      "image_url TEXT NOT NULL, "
+      "size TEXT NOT NULL)",
       get_table_name().c_str());
 
   DBCommandPtr command = DBCommand::New();

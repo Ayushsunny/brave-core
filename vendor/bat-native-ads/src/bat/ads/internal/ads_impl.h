@@ -158,6 +158,9 @@ class AdsImpl : public Ads,
       const std::string& creative_instance_id,
       const PromotedContentAdEventType event_type) override;
 
+  void GetBraveTodayAds(const std::vector<std::string>& sizes,
+                        GetBraveTodayAdsCallback callback) override;
+
   void OnBraveTodayAdEvent(const std::string& uuid,
                            const std::string& creative_instance_id,
                            const BraveTodayAdEventType event_type) override;

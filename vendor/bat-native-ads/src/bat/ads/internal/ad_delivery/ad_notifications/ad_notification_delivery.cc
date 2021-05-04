@@ -27,6 +27,7 @@ void DeliverAd(const AdNotificationInfo& ad) {
   AdsClientHelper::Get()->ShowNotification(ad);
 }
 
+// TODO(tmancey): Refactor to be generic
 void RecordAdImpression(const AdInfo& ad) {
   const std::string type_as_string = std::string(ad.type);
 

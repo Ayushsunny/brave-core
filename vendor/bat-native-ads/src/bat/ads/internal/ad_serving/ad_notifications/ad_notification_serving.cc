@@ -14,7 +14,6 @@
 #include "bat/ads/ad_notification_info.h"
 #include "bat/ads/ad_type.h"
 #include "bat/ads/internal/ad_delivery/ad_notifications/ad_notification_delivery.h"
-#include "bat/ads/internal/ad_serving/ad_notifications/ad_notification_serving_features.h"
 #include "bat/ads/internal/ad_serving/ad_targeting/geographic/subdivision/subdivision_targeting.h"
 #include "bat/ads/internal/ad_targeting/ad_targeting.h"
 #include "bat/ads/internal/ad_targeting/ad_targeting_segment.h"
@@ -34,6 +33,7 @@ namespace ad_notifications {
 
 namespace {
 
+// TODO(tmancey): Refactor to be generic
 void RecordAdOpportunityForSegments(const AdType& ad_type,
                                     const SegmentList& segments) {
   const std::string type_as_string = std::string(ad_type);

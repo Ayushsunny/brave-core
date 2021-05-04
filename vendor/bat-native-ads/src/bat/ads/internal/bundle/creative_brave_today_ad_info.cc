@@ -9,11 +9,15 @@ namespace ads {
 
 CreativeBraveTodayAdInfo::CreativeBraveTodayAdInfo() = default;
 
+CreativeBraveTodayAdInfo::CreativeBraveTodayAdInfo(
+    const CreativeBraveTodayAdInfo& info) = default;
+
 CreativeBraveTodayAdInfo::~CreativeBraveTodayAdInfo() = default;
 
 bool CreativeBraveTodayAdInfo::operator==(
     const CreativeBraveTodayAdInfo& rhs) const {
-  return title == rhs.title && description == rhs.description;
+  return title == rhs.title && description == rhs.description &&
+      image_url == rhs.image_url && size == rhs.size;
 }
 
 bool CreativeBraveTodayAdInfo::operator!=(

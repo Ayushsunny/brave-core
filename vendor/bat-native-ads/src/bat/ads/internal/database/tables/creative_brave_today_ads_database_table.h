@@ -25,14 +25,14 @@
 namespace ads {
 
 using GetCreativeBraveTodayAdCallback =
-    std::function<void(const Result,
+    std::function<void(const Result result,
                        const std::string& creative_instance_id,
-                       const CreativeBraveTodayAdInfo&)>;
+                       const CreativeBraveTodayAdInfo& ad)>;
 
 using GetCreativeBraveTodayAdsCallback =
-    std::function<void(const Result,
-                       const std::vector<std::string>&,
-                       const CreativeBraveTodayAdList&)>;
+    std::function<void(const Result result,
+                       const std::vector<std::string>& segments,
+                       const CreativeBraveTodayAdList& ads)>;
 
 namespace database {
 namespace table {

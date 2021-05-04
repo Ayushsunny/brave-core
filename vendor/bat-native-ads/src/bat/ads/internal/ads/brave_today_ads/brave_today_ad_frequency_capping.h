@@ -7,16 +7,31 @@
 #define BRAVE_VENDOR_BAT_NATIVE_ADS_SRC_BAT_ADS_INTERNAL_ADS_BRAVE_TODAY_ADS_BRAVE_TODAY_AD_FREQUENCY_CAPPING_H_
 
 #include "bat/ads/internal/ad_events/ad_event_info.h"
+#include "bat/ads/internal/frequency_capping/frequency_capping_aliases.h"
 
 namespace ads {
 
-struct AdInfo;
+struct CreativeAdInfo;
+
+namespace ad_targeting {
+namespace geographic {
+class SubdivisionTargeting;
+}  // namespace geographic
+}  // namespace ad_targeting
+
+namespace resource {
+class AntiTargeting;
+}  // namespace resource
 
 namespace brave_today_ads {
 
 class FrequencyCapping {
  public:
-  explicit FrequencyCapping(const AdEventList& ad_events);
+  FrequencyCapping(
+      ad_targeting::geographic::SubdivisionTargeting* subdivision_targeting,
+      resource::AntiTargeting* anti_targeting,
+      const AdEventList& ad_events,
+      const BrowsingHistoryList& history);
 
   ~FrequencyCapping();
 
@@ -25,10 +40,16 @@ class FrequencyCapping {
 
   bool IsAdAllowed();
 
-  bool ShouldExcludeAd(const AdInfo& ad);
+  bool ShouldExcludeAd(const CreativeAdInfo& ad);
 
  private:
+  ad_targeting::geographic::SubdivisionTargeting* subdivision_targeting_;
+
+  resource::AntiTargeting* anti_targeting_;
+
   AdEventList ad_events_;
+
+  BrowsingHistoryList history_;
 };
 
 }  // namespace brave_today_ads

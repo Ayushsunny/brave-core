@@ -32,9 +32,6 @@ class BraveTodayAd : public BraveTodayAdObserver {
  private:
   base::ObserverList<BraveTodayAdObserver> observers_;
 
-  bool ShouldFireEvent(const BraveTodayAdInfo& ad,
-                       const AdEventList& ad_events);
-
   void FireEvent(const BraveTodayAdInfo& ad,
                  const std::string& uuid,
                  const std::string& creative_instance_id,
