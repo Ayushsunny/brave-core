@@ -16,7 +16,6 @@ const char kFeatureName[] = "AdNotificationServing";
 
 const char kFieldTrialParameterBrowsingHistoryMaxCount[] =
     "browsing_history_max_count";
-
 const int kDefaultBrowsingHistoryMaxCount = 5000;
 
 const char kFieldTrialParameterBrowsingHistoryDaysAgo[] =

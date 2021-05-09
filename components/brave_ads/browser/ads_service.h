@@ -126,6 +126,11 @@ class AdsService : public KeyedService {
       const std::string& creative_instance_id,
       const ads::mojom::BraveAdsPromotedContentAdEventType event_type) = 0;
 
+  virtual void OnBraveTodayAdEvent(
+      const std::string& uuid,
+      const std::string& creative_instance_id,
+      const ads::mojom::BraveAdsBraveTodayAdEventType event_type) = 0;
+
   virtual void ReconcileAdRewards() = 0;
 
   virtual void GetAdsHistory(const uint64_t from_timestamp,

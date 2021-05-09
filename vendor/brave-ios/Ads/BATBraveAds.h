@@ -13,6 +13,11 @@ typedef NS_ENUM(NSInteger, BATAdNotificationEventType) {
   BATAdNotificationEventTypeTimedOut      // = ads::AdNotificationEventType::kTimedOut
 } NS_SWIFT_NAME(AdNotificationEventType);
 
+typedef NS_ENUM(NSInteger, BATBraveTodayAdEventType) {
+  BATBraveTodayAdEventTypeViewed,  // = ads::BraveTodayAdEventType::kViewed
+  BATBraveTodayAdEventTypeClicked  // = ads::BraveTodayAdEventType::kClicked
+} NS_SWIFT_NAME(BraveTodayAdEventType);
+
 typedef NS_ENUM(NSInteger, BATNewTabPageAdEventType) {
   BATNewTabPageAdEventTypeViewed,         // = ads::NewTabPageAdEventType::kViewed
   BATNewTabPageAdEventTypeClicked         // = ads::NewTabPageAdEventType::kClicked
@@ -142,6 +147,11 @@ NS_SWIFT_NAME(BraveAds)
 /// Report that an ad notification event type was triggered for a given id
 - (void)reportAdNotificationEvent:(NSString *)uuid
                         eventType:(BATAdNotificationEventType)eventType;
+
+/// Report that a Brave Today ad event type was triggered for a given id
+- (void)reportBraveTodayAdEvent:(NSString*)uuid
+             creativeInstanceId:(NSString*)creativeInstanceId
+                      eventType:(BATBraveTodayAdEventType)eventType;
 
 /// Report that a new tab page ad event type was triggered for a given id
 - (void)reportNewTabPageAdEvent:(NSString *)wallpaperId

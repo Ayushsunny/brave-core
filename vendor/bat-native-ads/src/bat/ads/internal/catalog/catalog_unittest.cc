@@ -77,6 +77,25 @@ class BatAdsCatalogTest : public UnitTestBase {
     catalog_creative_ad_notifications.push_back(
         catalog_creative_ad_notification);
 
+    // Creative Brave Today Ads
+    CatalogCreativeBraveTodayAdList catalog_creative_brave_today_ads;
+
+    CatalogCreativeBraveTodayAdInfo catalog_creative_brave_today_ad;
+    catalog_creative_brave_today_ad.creative_instance_id =
+        "4b65a1fe-b630-4bc4-bf4c-65aae306689d";
+    CatalogTypeInfo catalog_type_brave_today_ad_type;
+    catalog_type_brave_today_ad_type.code = "brave_today_all_v1";
+    catalog_type_brave_today_ad_type.name = "brave_today";
+    catalog_type_brave_today_ad_type.platform = "all";
+    catalog_type_brave_today_ad_type.version = 1;
+    catalog_creative_brave_today_ad.type = catalog_type_brave_today_ad_type;
+    catalog_creative_brave_today_ad.payload.title = "Brave Today 1";
+    catalog_creative_brave_today_ad.payload.description =
+        "Test Brave Today Ad Campaign 1";
+    catalog_creative_brave_today_ad.payload.target_url =
+        "https://brave.com/1/brave_today_ad";
+    catalog_creative_brave_today_ads.push_back(catalog_creative_brave_today_ad);
+
     // Creative New Tab Page Ads
     CatalogCreativeNewTabPageAdList catalog_creative_new_tab_page_ads;
 
@@ -144,6 +163,8 @@ class BatAdsCatalogTest : public UnitTestBase {
     catalog_creative_set.oses = catalog_oses;
     catalog_creative_set.creative_ad_notifications =
         catalog_creative_ad_notifications;
+    catalog_creative_set.creative_brave_today_ads =
+        catalog_creative_brave_today_ads;
     catalog_creative_set.creative_new_tab_page_ads =
         catalog_creative_new_tab_page_ads;
     catalog_creative_set.creative_promoted_content_ads =
@@ -233,6 +254,25 @@ class BatAdsCatalogTest : public UnitTestBase {
         "https://brave.com/2/ad_notification";
     catalog_creative_ad_notifications.push_back(
         catalog_creative_ad_notification);
+
+    // Creative Brave Today Ads
+    CatalogCreativeBraveTodayAdList catalog_creative_brave_today_ads;
+
+    CatalogCreativeBraveTodayAdInfo catalog_creative_brave_today_ad;
+    catalog_creative_brave_today_ad.creative_instance_id =
+        "f197f631-3367-45fb-96c8-fc19c269769a";
+    CatalogTypeInfo catalog_type_brave_today_ad_type;
+    catalog_type_brave_today_ad_type.code = "brave_today_all_v1";
+    catalog_type_brave_today_ad_type.name = "brave_today";
+    catalog_type_brave_today_ad_type.platform = "all";
+    catalog_type_brave_today_ad_type.version = 1;
+    catalog_creative_brave_today_ad.type = catalog_type_brave_today_ad_type;
+    catalog_creative_brave_today_ad.payload.title = "Brave Today 2";
+    catalog_creative_brave_today_ad.payload.description =
+        "Test Brave Today Ad Campaign 2";
+    catalog_creative_brave_today_ad.payload.target_url =
+        "https://brave.com/2/brave_today_ad";
+    catalog_creative_brave_today_ads.push_back(catalog_creative_brave_today_ad);
 
     // Creative New Tab Page Ads
     CatalogCreativeNewTabPageAdList catalog_creative_new_tab_page_ads;

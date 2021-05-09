@@ -172,6 +172,11 @@ class ADS_EXPORT Ads {
       const std::string& creative_instance_id,
       const PromotedContentAdEventType event_type) = 0;
 
+  // Should be called when a user views or clicks a Brave Today ad
+  virtual void OnBraveTodayAdEvent(const std::string& uuid,
+                                   const std::string& creative_instance_id,
+                                   const BraveTodayAdEventType event_type) = 0;
+
   // Should be called to remove all cached history. The callback takes one
   // argument - |Result| should be set to |SUCCESS| if successful otherwise
   // should be set to |FAILED|

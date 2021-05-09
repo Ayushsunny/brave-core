@@ -174,6 +174,136 @@ TEST(BatAdsAdServingFeaturesTest, DisabledMaximumAdNotificationsPerDay) {
             maximum_ad_notifications_per_day);
 }
 
+TEST(BatAdsAdServingFeaturesTest, MaximumBraveTodayAdsPerHour) {
+  // Arrange
+  std::vector<base::test::ScopedFeatureList::FeatureAndParams> enabled_features;
+  base::FieldTrialParams kAdServingParameters;
+  kAdServingParameters["maximum_brave_today_ads_per_hour"] = "21";
+  enabled_features.push_back({features::kAdServing, kAdServingParameters});
+
+  const std::vector<base::Feature> disabled_features;
+
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeaturesAndParameters(enabled_features,
+                                                    disabled_features);
+
+  // Act
+  const int maximum_brave_today_ads_per_hour =
+      features::GetMaximumBraveTodayAdsPerHour();
+
+  // Assert
+  const int expected_maximum_brave_today_ads_per_hour = 21;
+  EXPECT_EQ(expected_maximum_brave_today_ads_per_hour,
+            maximum_brave_today_ads_per_hour);
+}
+
+TEST(BatAdsAdServingFeaturesTest, DefaultMaximumBraveTodayAdsPerHour) {
+  // Arrange
+  const std::vector<base::test::ScopedFeatureList::FeatureAndParams>
+      enabled_features;
+
+  const std::vector<base::Feature> disabled_features;
+
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeaturesAndParameters(enabled_features,
+                                                    disabled_features);
+  // Act
+  const int maximum_brave_today_ads_per_hour =
+      features::GetMaximumBraveTodayAdsPerHour();
+
+  // Assert
+  const int expected_maximum_brave_today_ads_per_hour = 4;
+  EXPECT_EQ(expected_maximum_brave_today_ads_per_hour,
+            maximum_brave_today_ads_per_hour);
+}
+
+TEST(BatAdsAdServingFeaturesTest, DisabledMaximumBraveTodayAdsPerHour) {
+  // Arrange
+  const std::vector<base::test::ScopedFeatureList::FeatureAndParams>
+      enabled_features;
+
+  std::vector<base::Feature> disabled_features;
+  disabled_features.push_back(features::kAdServing);
+
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeaturesAndParameters(enabled_features,
+                                                    disabled_features);
+
+  // Act
+  const int maximum_brave_today_ads_per_hour =
+      features::GetMaximumBraveTodayAdsPerHour();
+
+  // Assert
+  const int expected_maximum_brave_today_ads_per_hour = 4;
+  EXPECT_EQ(expected_maximum_brave_today_ads_per_hour,
+            maximum_brave_today_ads_per_hour);
+}
+
+TEST(BatAdsAdServingFeaturesTest, MaximumBraveTodayAdsPerDay) {
+  // Arrange
+  std::vector<base::test::ScopedFeatureList::FeatureAndParams> enabled_features;
+  base::FieldTrialParams kAdServingParameters;
+  kAdServingParameters["maximum_brave_today_ads_per_day"] = "24";
+  enabled_features.push_back({features::kAdServing, kAdServingParameters});
+
+  const std::vector<base::Feature> disabled_features;
+
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeaturesAndParameters(enabled_features,
+                                                    disabled_features);
+
+  // Act
+  const int maximum_brave_today_ads_per_day =
+      features::GetMaximumBraveTodayAdsPerDay();
+
+  // Assert
+  const int expected_maximum_brave_today_ads_per_day = 24;
+  EXPECT_EQ(expected_maximum_brave_today_ads_per_day,
+            maximum_brave_today_ads_per_day);
+}
+
+TEST(BatAdsAdServingFeaturesTest, DefaultMaximumBraveTodayAdsPerDay) {
+  // Arrange
+  const std::vector<base::test::ScopedFeatureList::FeatureAndParams>
+      enabled_features;
+
+  const std::vector<base::Feature> disabled_features;
+
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeaturesAndParameters(enabled_features,
+                                                    disabled_features);
+  // Act
+  const int maximum_brave_today_ads_per_day =
+      features::GetMaximumBraveTodayAdsPerDay();
+
+  // Assert
+  const int expected_maximum_brave_today_ads_per_day = 20;
+  EXPECT_EQ(expected_maximum_brave_today_ads_per_day,
+            maximum_brave_today_ads_per_day);
+}
+
+TEST(BatAdsAdServingFeaturesTest, DisabledMaximumBraveTodayAdsPerDay) {
+  // Arrange
+  const std::vector<base::test::ScopedFeatureList::FeatureAndParams>
+      enabled_features;
+
+  std::vector<base::Feature> disabled_features;
+  disabled_features.push_back(features::kAdServing);
+
+  base::test::ScopedFeatureList scoped_feature_list;
+  scoped_feature_list.InitWithFeaturesAndParameters(enabled_features,
+                                                    disabled_features);
+
+  // Act
+  const int maximum_brave_today_ads_per_day =
+      features::GetMaximumBraveTodayAdsPerDay();
+
+  // Assert
+  const int expected_maximum_brave_today_ads_per_day = 20;
+  EXPECT_EQ(expected_maximum_brave_today_ads_per_day,
+            maximum_brave_today_ads_per_day);
+}
+
 TEST(BatAdsAdServingFeaturesTest, MaximumNewTabPageAdsPerHour) {
   // Arrange
   std::vector<base::test::ScopedFeatureList::FeatureAndParams> enabled_features;

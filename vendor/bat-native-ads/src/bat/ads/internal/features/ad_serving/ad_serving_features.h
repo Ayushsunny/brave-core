@@ -17,8 +17,13 @@ bool IsAdServingEnabled();
 
 int GetDefaultAdNotificationsPerHour();
 int GetMaximumAdNotificationsPerDay();
+
+int GetMaximumBraveTodayAdsPerHour();
+int GetMaximumBraveTodayAdsPerDay();
+
 int GetMaximumNewTabPageAdsPerHour();
 int GetMaximumNewTabPageAdsPerDay();
+
 int GetMaximumPromotedContentAdsPerHour();
 int GetMaximumPromotedContentAdsPerDay();
 

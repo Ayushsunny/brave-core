@@ -16,6 +16,7 @@
 #include "bat/ads/internal/ad_server/ad_server_observer.h"
 #include "bat/ads/internal/ad_transfer/ad_transfer_observer.h"
 #include "bat/ads/internal/ads/ad_notifications/ad_notification_observer.h"
+#include "bat/ads/internal/ads/brave_today_ads/brave_today_ad_observer.h"
 #include "bat/ads/internal/ads/new_tab_page_ads/new_tab_page_ad_observer.h"
 #include "bat/ads/internal/ads/promoted_content_ads/promoted_content_ad_observer.h"
 #include "bat/ads/internal/conversions/conversions_observer.h"
@@ -65,6 +66,7 @@ class AdsClientHelper;
 class AdServer;
 class AdTargeting;
 class AdTransfer;
+class BraveTodayAd;
 class BrowserManager;
 class Catalog;
 class Client;
@@ -77,6 +79,7 @@ class UserActivity;
 struct AdInfo;
 struct AdNotificationInfo;
 struct AdsHistoryInfo;
+struct BraveTodayAdInfo;
 struct NewTabPageAdInfo;
 struct PromotedContentAdInfo;
 
@@ -85,6 +88,7 @@ class AdsImpl : public Ads,
                 public AdNotificationObserver,
                 public AdServerObserver,
                 public AdTransferObserver,
+                public BraveTodayAdObserver,
                 public ConversionsObserver,
                 public NewTabPageAdObserver,
                 public PromotedContentAdObserver {
@@ -154,6 +158,10 @@ class AdsImpl : public Ads,
       const std::string& creative_instance_id,
       const PromotedContentAdEventType event_type) override;
 
+  void OnBraveTodayAdEvent(const std::string& uuid,
+                           const std::string& creative_instance_id,
+                           const BraveTodayAdEventType event_type) override;
+
   void RemoveAllHistory(RemoveAllHistoryCallback callback) override;
 
   void ReconcileAdRewards() override;
@@ -212,6 +220,7 @@ class AdsImpl : public Ads,
   std::unique_ptr<AdNotifications> ad_notifications_;
   std::unique_ptr<AdServer> ad_server_;
   std::unique_ptr<AdTransfer> ad_transfer_;
+  std::unique_ptr<BraveTodayAd> brave_today_ad_;
   std::unique_ptr<Client> client_;
   std::unique_ptr<Conversions> conversions_;
   std::unique_ptr<database::Initialize> database_;
@@ -259,6 +268,10 @@ class AdsImpl : public Ads,
   // PromotedContentAdObserver implementation
   void OnPromotedContentAdViewed(const PromotedContentAdInfo& ad) override;
   void OnPromotedContentAdClicked(const PromotedContentAdInfo& ad) override;
+
+  // BraveTodayAdObserver implementation
+  void OnBraveTodayAdViewed(const BraveTodayAdInfo& ad) override;
+  void OnBraveTodayAdClicked(const BraveTodayAdInfo& ad) override;
 
   // AdTransferObserver implementation
   void OnAdTransfer(const AdInfo& ad) override;

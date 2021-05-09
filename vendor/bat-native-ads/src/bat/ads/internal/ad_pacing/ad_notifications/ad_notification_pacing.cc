@@ -12,29 +12,9 @@
 namespace ads {
 namespace ad_notifications {
 
-AdPacing::AdPacing() = default;
+namespace {
 
-AdPacing::~AdPacing() = default;
-
-CreativeAdNotificationList AdPacing::PaceAds(
-    const CreativeAdNotificationList& ads) {
-  CreativeAdNotificationList paced_ads = ads;
-
-  const auto iter = std::remove_if(
-      paced_ads.begin(), paced_ads.end(),
-      [&](const CreativeAdNotificationInfo& ad) { return ShouldPace(ad); });
-
-  paced_ads.erase(iter, paced_ads.end());
-
-  const auto priority_filter =
-      EligibleAdsFilterFactory::Build(EligibleAdsFilter::Type::kPriority);
-  DCHECK(priority_filter);
-  return priority_filter->Apply(paced_ads);
-}
-
-///////////////////////////////////////////////////////////////////////////////
-
-bool AdPacing::ShouldPace(const CreativeAdNotificationInfo& ad) {
+bool ShouldPace(const CreativeAdNotificationInfo& ad) {
   const double rand = base::RandDouble();
   if (rand <= ad.ptr) {
     return false;
@@ -45,6 +25,24 @@ bool AdPacing::ShouldPace(const CreativeAdNotificationInfo& ad) {
               << "]");
 
   return true;
+}
+
+}  // namespace
+
+CreativeAdNotificationList PaceAds(const CreativeAdNotificationList& ads) {
+  CreativeAdNotificationList paced_ads = ads;
+
+  const auto iter = std::remove_if(
+      paced_ads.begin(), paced_ads.end(),
+      [&](const CreativeAdNotificationInfo& ad) { return ShouldPace(ad); });
+
+  paced_ads.erase(iter, paced_ads.end());
+
+  // TODO(tmancey): Decouple priority filter, and implement like pacing
+  const auto priority_filter =
+      EligibleAdsFilterFactory::Build(EligibleAdsFilter::Type::kPriority);
+  DCHECK(priority_filter);
+  return priority_filter->Apply(paced_ads);
 }
 
 }  // namespace ad_notifications

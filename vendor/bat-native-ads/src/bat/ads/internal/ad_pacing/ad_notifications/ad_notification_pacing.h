@@ -11,17 +11,7 @@
 namespace ads {
 namespace ad_notifications {
 
-class AdPacing {
- public:
-  AdPacing();
-
-  ~AdPacing();
-
-  CreativeAdNotificationList PaceAds(const CreativeAdNotificationList& ads);
-
- private:
-  bool ShouldPace(const CreativeAdNotificationInfo& ad);
-};
+CreativeAdNotificationList PaceAds(const CreativeAdNotificationList& ads);
 
 }  // namespace ad_notifications
 }  // namespace ads

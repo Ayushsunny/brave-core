@@ -6,10 +6,10 @@
 #include "bat/ads/internal/ads/new_tab_page_ads/new_tab_page_ad.h"
 
 #include "bat/ads/internal/ad_events/new_tab_page_ads/new_tab_page_ad_event_factory.h"
+#include "bat/ads/internal/ads/new_tab_page_ads/new_tab_page_ad_frequency_capping.h"
 #include "bat/ads/internal/bundle/creative_new_tab_page_ad_info.h"
 #include "bat/ads/internal/database/tables/ad_events_database_table.h"
 #include "bat/ads/internal/database/tables/creative_new_tab_page_ads_database_table.h"
-#include "bat/ads/internal/frequency_capping/new_tab_page_ads/new_tab_page_ads_frequency_capping.h"
 #include "bat/ads/internal/logging.h"
 #include "bat/ads/new_tab_page_ad_info.h"
 

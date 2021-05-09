@@ -12,6 +12,7 @@
 #include "base/strings/stringprintf.h"
 #include "base/time/time.h"
 #include "bat/ads/internal/ads_client_helper.h"
+#include "bat/ads/internal/bundle/creative_ad_info.h"
 #include "bat/ads/internal/container_util.h"
 #include "bat/ads/internal/database/database_statement_util.h"
 #include "bat/ads/internal/database/database_table_util.h"
@@ -57,7 +58,7 @@ void CreativeAdNotifications::Save(
   for (const auto& batch : batches) {
     InsertOrUpdate(transaction.get(), batch);
 
-    std::vector<CreativeAdInfo> creative_ads(batch.begin(), batch.end());
+    CreativeAdList creative_ads(batch.begin(), batch.end());
     campaigns_database_table_->InsertOrUpdate(transaction.get(), creative_ads);
     segments_database_table_->InsertOrUpdate(transaction.get(), creative_ads);
     creative_ads_database_table_->InsertOrUpdate(transaction.get(),

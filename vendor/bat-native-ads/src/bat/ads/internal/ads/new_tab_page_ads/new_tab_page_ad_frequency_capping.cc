@@ -3,19 +3,19 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "bat/ads/internal/frequency_capping/promoted_content_ads/promoted_content_ads_frequency_capping.h"
+#include "bat/ads/internal/ads/new_tab_page_ads/new_tab_page_ad_frequency_capping.h"
 
 #include "bat/ads/ad_info.h"
 #include "bat/ads/internal/frequency_capping/exclusion_rules/exclusion_rule_util.h"
-#include "bat/ads/internal/frequency_capping/exclusion_rules/promoted_content_ad_uuid_frequency_cap.h"
+#include "bat/ads/internal/frequency_capping/exclusion_rules/new_tab_page_ad_uuid_frequency_cap.h"
+#include "bat/ads/internal/frequency_capping/permission_rules/new_tab_page_ads_per_day_frequency_cap.h"
+#include "bat/ads/internal/frequency_capping/permission_rules/new_tab_page_ads_per_hour_frequency_cap.h"
 #include "bat/ads/internal/frequency_capping/permission_rules/permission_rule_util.h"
-#include "bat/ads/internal/frequency_capping/permission_rules/promoted_content_ads_per_day_frequency_cap.h"
-#include "bat/ads/internal/frequency_capping/permission_rules/promoted_content_ads_per_hour_frequency_cap.h"
 #include "bat/ads/internal/frequency_capping/permission_rules/unblinded_tokens_frequency_cap.h"
 #include "bat/ads/internal/logging.h"
 
 namespace ads {
-namespace promoted_content_ads {
+namespace new_tab_page_ads {
 
 FrequencyCapping::FrequencyCapping(const AdEventList& ad_events)
     : ad_events_(ad_events) {}
@@ -28,12 +28,12 @@ bool FrequencyCapping::IsAdAllowed() {
     return false;
   }
 
-  PromotedContentAdsPerDayFrequencyCap ads_per_day_frequency_cap;
+  NewTabPageAdsPerDayFrequencyCap ads_per_day_frequency_cap;
   if (!ShouldAllow(&ads_per_day_frequency_cap)) {
     return false;
   }
 
-  PromotedContentAdsPerHourFrequencyCap ads_per_hour_frequency_cap;
+  NewTabPageAdsPerHourFrequencyCap ads_per_hour_frequency_cap;
   if (!ShouldAllow(&ads_per_hour_frequency_cap)) {
     return false;
   }
@@ -42,9 +42,9 @@ bool FrequencyCapping::IsAdAllowed() {
 }
 
 bool FrequencyCapping::ShouldExcludeAd(const AdInfo& ad) {
-  PromotedContentAdUuidFrequencyCap frequency_cap(ad_events_);
+  NewTabPageAdUuidFrequencyCap frequency_cap(ad_events_);
   return ShouldExclude(ad, &frequency_cap);
 }
 
-}  // namespace promoted_content_ads
+}  // namespace new_tab_page_ads
 }  // namespace ads

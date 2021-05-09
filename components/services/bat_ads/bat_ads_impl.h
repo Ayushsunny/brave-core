@@ -95,6 +95,11 @@ class BatAdsImpl :
       const std::string& creative_instance_id,
       const ads::PromotedContentAdEventType event_type) override;
 
+  void OnBraveTodayAdEvent(
+      const std::string& uuid,
+      const std::string& creative_instance_id,
+      const ads::BraveTodayAdEventType event_type) override;
+
   void RemoveAllHistory(
       RemoveAllHistoryCallback callback) override;
 

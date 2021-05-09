@@ -3,7 +3,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#include "bat/ads/internal/frequency_capping/ad_notifications/ad_notifications_frequency_capping.h"
+#include "bat/ads/internal/ads/ad_notifications/ad_notification_frequency_capping.h"
 
 #include "bat/ads/internal/ad_serving/ad_targeting/geographic/subdivision/subdivision_targeting.h"
 #include "bat/ads/internal/bundle/creative_ad_info.h"

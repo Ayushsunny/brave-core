@@ -1049,6 +1049,17 @@ void AdsServiceImpl::OnPromotedContentAdEvent(
   bat_ads_->OnPromotedContentAdEvent(uuid, creative_instance_id, event_type);
 }
 
+void AdsServiceImpl::OnBraveTodayAdEvent(
+    const std::string& uuid,
+    const std::string& creative_instance_id,
+    const ads::BraveTodayAdEventType event_type) {
+  if (!connected()) {
+    return;
+  }
+
+  bat_ads_->OnBraveTodayAdEvent(uuid, creative_instance_id, event_type);
+}
+
 void AdsServiceImpl::RetryOpeningNewTabWithAd(const std::string& uuid) {
   VLOG(1) << "Retry opening new tab for ad with uuid " << uuid;
   retry_opening_new_tab_for_ad_with_uuid_ = uuid;

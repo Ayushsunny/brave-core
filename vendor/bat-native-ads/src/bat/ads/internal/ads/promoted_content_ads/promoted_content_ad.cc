@@ -6,10 +6,10 @@
 #include "bat/ads/internal/ads/promoted_content_ads/promoted_content_ad.h"
 
 #include "bat/ads/internal/ad_events/promoted_content_ads/promoted_content_ad_event_factory.h"
+#include "bat/ads/internal/ads/promoted_content_ads/promoted_content_ad_frequency_capping.h"
 #include "bat/ads/internal/bundle/creative_promoted_content_ad_info.h"
 #include "bat/ads/internal/database/tables/ad_events_database_table.h"
 #include "bat/ads/internal/database/tables/creative_promoted_content_ads_database_table.h"
-#include "bat/ads/internal/frequency_capping/promoted_content_ads/promoted_content_ads_frequency_capping.h"
 #include "bat/ads/internal/logging.h"
 #include "bat/ads/promoted_content_ad_info.h"
 

@@ -154,6 +154,13 @@ void BatAdsImpl::OnPromotedContentAdEvent(
   ads_->OnPromotedContentAdEvent(uuid, creative_instance_id, event_type);
 }
 
+void BatAdsImpl::OnBraveTodayAdEvent(
+    const std::string& uuid,
+    const std::string& creative_instance_id,
+    const ads::BraveTodayAdEventType event_type) {
+  ads_->OnBraveTodayAdEvent(uuid, creative_instance_id, event_type);
+}
+
 void BatAdsImpl::RemoveAllHistory(
     RemoveAllHistoryCallback callback) {
   auto* holder = new CallbackHolder<RemoveAllHistoryCallback>(AsWeakPtr(),

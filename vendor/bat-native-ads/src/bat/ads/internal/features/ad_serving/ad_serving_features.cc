@@ -23,6 +23,13 @@ const char kFieldTrialParameterMaximumAdNotificationsPerDay[] =
     "maximum_ad_notifications_per_day";
 const int kDefaultMaximumAdNotificationsPerDay = 40;
 
+const char kFieldTrialParameterMaximumBraveTodayAdsPerHour[] =
+    "maximum_brave_today_ads_per_hour";
+const int kDefaultMaximumBraveTodayAdsPerHour = 4;
+const char kFieldTrialParameterMaximumBraveTodayAdsPerDay[] =
+    "maximum_brave_today_ads_per_day";
+const int kDefaultMaximumBraveTodayAdsPerDay = 20;
+
 const char kFieldTrialParameterMaximumNewTabPageAdsPerHour[] =
     "maximum_new_tab_page_ads_per_hour";
 const int kDefaultMaximumNewTabPageAdsPerHour = 4;
@@ -55,6 +62,18 @@ int GetMaximumAdNotificationsPerDay() {
   return GetFieldTrialParamByFeatureAsInt(
       kAdServing, kFieldTrialParameterMaximumAdNotificationsPerDay,
       kDefaultMaximumAdNotificationsPerDay);
+}
+
+int GetMaximumBraveTodayAdsPerHour() {
+  return GetFieldTrialParamByFeatureAsInt(
+      kAdServing, kFieldTrialParameterMaximumBraveTodayAdsPerHour,
+      kDefaultMaximumBraveTodayAdsPerHour);
+}
+
+int GetMaximumBraveTodayAdsPerDay() {
+  return GetFieldTrialParamByFeatureAsInt(
+      kAdServing, kFieldTrialParameterMaximumBraveTodayAdsPerDay,
+      kDefaultMaximumBraveTodayAdsPerDay);
 }
 
 int GetMaximumNewTabPageAdsPerHour() {

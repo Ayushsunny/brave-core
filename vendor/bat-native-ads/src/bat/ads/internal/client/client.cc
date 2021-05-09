@@ -6,10 +6,12 @@
 #include "bat/ads/internal/client/client.h"
 
 #include <algorithm>
+#include <cstdint>
 #include <functional>
 
 #include "bat/ads/ad_content_info.h"
 #include "bat/ads/ad_history_info.h"
+#include "bat/ads/ad_info.h"
 #include "bat/ads/category_content_info.h"
 #include "bat/ads/internal/ad_targeting/data_types/behavioral/purchase_intent/purchase_intent_signal_history_info.h"
 #include "bat/ads/internal/ads_client_helper.h"
@@ -348,63 +350,64 @@ bool Client::ToggleFlagAd(const std::string& creative_instance_id,
   return flagged_ad;
 }
 
-void Client::UpdateSeenAdNotification(const std::string& creative_instance_id) {
-  client_->seen_ad_notifications.insert({creative_instance_id, 1});
-
+void Client::UpdateSeenAd(const AdInfo& ad) {
+  const std::string type_as_string = std::string(ad.type);
+  client_->seen_ads[type_as_string][ad.creative_instance_id] = true;
+  client_->seen_advertisers[type_as_string][ad.advertiser_id] = true;
   Save();
 }
 
-const std::map<std::string, uint64_t>& Client::GetSeenAdNotifications() {
-  return client_->seen_ad_notifications;
+const std::map<std::string, bool>& Client::GetSeenAdsForType(
+    const AdType& type) {
+  const std::string type_as_string = std::string(type);
+  return client_->seen_ads[type_as_string];
 }
 
-void Client::ResetSeenAdNotifications(const CreativeAdNotificationList& ads) {
-  BLOG(1, "Resetting seen ad notifications");
+void Client::ResetSeenAdsForType(const CreativeAdNotificationList& ads,
+                                 const AdType& ad_type) {
+  BLOG(1, "Resetting seen " << std::string(ad_type) << " ads");
 
-  for (const auto& ad : ads) {
-    auto seen_ad_notification =
-        client_->seen_ad_notifications.find(ad.creative_instance_id);
-    if (seen_ad_notification != client_->seen_ad_notifications.end()) {
-      client_->seen_ad_notifications.erase(seen_ad_notification);
-    }
-  }
+  // for (const auto& ad : ads) {
+  //   auto seen_ad_notification =
+  //       client_->seen_ad_notifications.find(ad.creative_instance_id);
+  //   if (seen_ad_notification != client_->seen_ad_notifications.end()) {
+  //     client_->seen_ad_notifications.erase(seen_ad_notification);
+  //   }
+  // }
 
-  Save();
+  // Save();
 }
 
-void Client::UpdateSeenAdvertiser(const std::string& advertiser_id) {
-  client_->seen_advertisers.insert({advertiser_id, 1});
-
-  Save();
+const std::map<std::string, bool>& Client::GetSeenAdvertisersForType(
+    const AdType& type) {
+  const std::string type_as_string = std::string(type);
+  return client_->seen_advertisers[type_as_string];
 }
 
-const std::map<std::string, uint64_t>& Client::GetSeenAdvertisers() {
-  return client_->seen_advertisers;
-}
+void Client::ResetSeenAdvertisersForType(const CreativeAdNotificationList& ads,
+                                         const AdType& ad_type) {
+  BLOG(1, "Resetting seen " << std::string(ad_type) << " advertisers");
 
-void Client::ResetSeenAdvertisers(const CreativeAdNotificationList& ads) {
-  BLOG(1, "Resetting seen advertisers");
+  // for (const auto& ad : ads) {
+  //   auto seen_advertiser = client_->seen_advertisers.find(ad.advertiser_id);
+  //   if (seen_advertiser != client_->seen_advertisers.end()) {
+  //     client_->seen_advertisers.erase(seen_advertiser);
+  //   }
+  // }
 
-  for (const auto& ad : ads) {
-    auto seen_advertiser = client_->seen_advertisers.find(ad.advertiser_id);
-    if (seen_advertiser != client_->seen_advertisers.end()) {
-      client_->seen_advertisers.erase(seen_advertiser);
-    }
-  }
-
-  Save();
+  // Save();
 }
 
 void Client::SetNextAdServingInterval(
     const base::Time& next_check_serve_ad_date) {
-  client_->next_ad_serving_interval_timestamp_ =
+  client_->next_ad_serving_interval_timestamp =
       static_cast<uint64_t>(next_check_serve_ad_date.ToDoubleT());
 
   Save();
 }
 
 base::Time Client::GetNextAdServingInterval() {
-  return base::Time::FromDoubleT(client_->next_ad_serving_interval_timestamp_);
+  return base::Time::FromDoubleT(client_->next_ad_serving_interval_timestamp);
 }
 
 void Client::AppendTextClassificationProbabilitiesToHistory(
