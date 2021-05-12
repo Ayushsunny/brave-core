@@ -11,17 +11,73 @@
 #include "base/feature_list.h"
 #include "base/files/file_util.h"
 #include "base/logging.h"
+#include "base/macros.h"
+#include "base/no_destructor.h"
+#include "base/strings/string_util.h"
 #include "base/task/post_task.h"
 #include "base/task/thread_pool.h"
 #include "brave/components/speedreader/features.h"
 #include "brave/components/speedreader/speedreader_component.h"
 #include "components/grit/brave_components_resources.h"
+#include "third_party/re2/src/re2/re2.h"
 #include "ui/base/resource/resource_bundle.h"
 #include "url/gurl.h"
 
 namespace speedreader {
 
 namespace {
+
+// Regex pattern for paths like /blog/, /article/, /post/, hinting the page
+// is a blog entry, magazine entry, or news article.
+const char kReadablePathSingleComponentHints[] =
+    "/(blogs?|news|articles?|posts?|amp)/";
+// Regex pattern for matching URL paths of the form /YYYY/MM/DD/, which is
+// extremely common for news websites.
+const char kReadablePathMultiComponentHints[] = "/\\d\\d\\d\\d/\\d\\d/";
+
+const char kReadableBlogSubdomain[] = "blog.";
+
+// Helper class for testing URLs against precompiled regexes. This is a
+// singleton so the cached regexes are created only once.
+class URLReadableHintExtractor {
+ public:
+  static URLReadableHintExtractor* GetInstance() {
+    static base::NoDestructor<URLReadableHintExtractor> instance;
+    return instance.get();
+  }
+
+  bool HasHints(const GURL& url) {
+    if (base::StartsWith(url.host_piece(), kReadableBlogSubdomain))
+      return true;
+
+    // Look for single components such as /blog/, /news/, /article/ and for
+    // multi-path components like /YYYY/MM/DD
+    if (re2::RE2::PartialMatch(url.path(), path_single_component_hints_) ||
+        re2::RE2::PartialMatch(url.path(), path_multi_component_hints_)) {
+      return true;
+    }
+
+    return false;
+  }
+
+ private:
+  // friend itself so GetInstance() can call private constructor.
+  friend class base::NoDestructor<URLReadableHintExtractor>;
+
+  URLReadableHintExtractor()
+      : path_single_component_hints_(kReadablePathSingleComponentHints),
+        path_multi_component_hints_(kReadablePathMultiComponentHints) {
+    DCHECK(path_single_component_hints_.ok());
+    DCHECK(path_multi_component_hints_.ok());
+  }
+
+  ~URLReadableHintExtractor() = default;
+
+  const re2::RE2 path_single_component_hints_;
+  const re2::RE2 path_multi_component_hints_;
+
+  DISALLOW_COPY_AND_ASSIGN(URLReadableHintExtractor);
+};
 
 std::string GetDistilledPageStylesheet(const base::FilePath& stylesheet_path) {
   std::string stylesheet;
@@ -90,9 +146,23 @@ void SpeedreaderRewriterService::OnStylesheetReady(const base::FilePath& path) {
 }
 
 bool SpeedreaderRewriterService::IsWhitelisted(const GURL& url) {
-  return backend_ == RewriterType::RewriterStreaming
-             ? speedreader_->IsReadableURL(url.spec())
-             : true;
+  if (backend_ == RewriterType::RewriterStreaming) {
+    return speedreader_->IsReadableURL(url.spec());
+  } else {
+    // Only HTTP is readable.
+    if (!url.SchemeIsHTTPOrHTTPS())
+      return false;
+
+    // @pes research has shown basically no landing pages are readable.
+    if (!url.has_path() || url.path_piece() == "/")
+      return false;
+
+    // TODO(keur): Once implemented, check against the "maybe-speedreadable"
+    // list here.
+
+    // Check URL against precompiled regexes
+    return URLReadableHintExtractor::GetInstance()->HasHints(url);
+  }
 }
 
 std::unique_ptr<Rewriter> SpeedreaderRewriterService::MakeRewriter(
