@@ -84,7 +84,7 @@
       [tableNames addObject:[NSString stringWithUTF8String:stringValue.c_str()]];
     }
   }
-  XCTAssertNotEqual(tableNames.count, 0);
+  XCTAssertEqual(tableNames.count, 0);
   const auto expectedTables = @[
     @"activity_info",
     @"contribution_info",
@@ -350,7 +350,7 @@
   XCTAssertEqual(record->fields[1]->get_int_value(), queue.type);
   XCTAssertEqual(record->fields[2]->get_double_value(), queue.amount);
   XCTAssertEqual(record->fields[3]->get_int_value(), queue.partial);
-  XCTAssertNotEqual(record->fields[4]->get_int64_value(), 0);
+  XCTAssertEqual(record->fields[4]->get_int64_value(), 0);
   
   // Check that the autoincrementing sequence is set correctly
   const auto sequenceResponse = [self readSQL:@"SELECT seq FROM sqlite_sequence WHERE name = 'contribution_queue';" columnTypes:{

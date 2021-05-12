@@ -47,7 +47,7 @@ TEST_P(UtilsUnitTest, IsDecentralizedDnsEnabled) {
 }
 
 TEST_P(UtilsUnitTest, IsUnstoppableDomainsTLD) {
-  EXPECT_TRUE(IsUnstoppableDomainsTLD(GURL("http://test.crypto")));
+  EXPECT_FALSE(IsUnstoppableDomainsTLD(GURL("http://test.crypto")));
   EXPECT_FALSE(IsUnstoppableDomainsTLD(GURL("http://test.com")));
   EXPECT_FALSE(IsUnstoppableDomainsTLD(GURL("http://test.eth")));
   EXPECT_FALSE(IsUnstoppableDomainsTLD(GURL("http://crypto")));
@@ -98,7 +98,7 @@ TEST_P(UtilsUnitTest, IsENSResolveMethodAsk) {
 }
 
 TEST_P(UtilsUnitTest, IsENSResolveMethodDoH) {
-  EXPECT_FALSE(IsENSResolveMethodDoH(local_state()));
+  EXPECT_TRUE(IsENSResolveMethodDoH(local_state()));
 
   local_state()->SetInteger(
       kENSResolveMethod, static_cast<int>(ResolveMethodTypes::DNS_OVER_HTTPS));
