@@ -8,7 +8,7 @@
 namespace tor {
 namespace prefs {
 
-onst char kTorDisabled[] = "tor.tor_disabled";
+const char kTorDisabled[] = "tor.tor_disabled";
 
 const char kAutoOnionRedirect[] = "tor.auto_onion_location";
 
