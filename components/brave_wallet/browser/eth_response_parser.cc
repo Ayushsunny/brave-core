@@ -9,6 +9,7 @@
 
 #include "base/json/json_reader.h"
 #include "base/logging.h"
+#include "brave/components/brave_wallet/browser/brave_wallet_utils.h"
 
 namespace {
 
@@ -37,6 +38,17 @@ namespace brave_wallet {
 
 bool ParseEthGetBalance(const std::string& json, std::string* hex_balance) {
   return ParseSingleStringResult(json, hex_balance);
+}
+
+bool ParseEthGetTransactionCount(const std::string& json, uint256_t* count) {
+  std::string count_str;
+  if (!ParseSingleStringResult(json, &count_str))
+    return false;
+
+  if (!HexValueToUint256(count_str, count))
+    return false;
+
+  return true;
 }
 
 bool ParseEthCall(const std::string& json, std::string* result) {

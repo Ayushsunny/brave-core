@@ -14,6 +14,7 @@
 
 #include "base/callback.h"
 #include "brave/components/brave_wallet/browser/brave_wallet_constants.h"
+#include "brave/components/brave_wallet/browser/brave_wallet_types.h"
 #include "url/gurl.h"
 
 namespace content {
@@ -41,6 +42,11 @@ class EthJsonRpcController {
   using GetBallanceCallback =
       base::OnceCallback<void(bool status, const std::string& balance)>;
   void GetBalance(const std::string& address, GetBallanceCallback callback);
+
+  using GetTxCountCallback =
+      base::OnceCallback<void(bool status, uint256_t result)>;
+  void GetTransactionCount(const std::string& address,
+                           GetTxCountCallback callback);
 
   using GetERC20TokenBalanceCallback =
       base::OnceCallback<void(bool status, const std::string& balance)>;
@@ -76,6 +82,10 @@ class EthJsonRpcController {
                     const int status,
                     const std::string& body,
                     const std::map<std::string, std::string>& headers);
+  void OnGetTransactionCount(GetTxCountCallback callback,
+                             const int status,
+                             const std::string& body,
+                             const std::map<std::string, std::string>& headers);
   void OnGetERC20TokenBalance(
       GetERC20TokenBalanceCallback callback,
       const int status,

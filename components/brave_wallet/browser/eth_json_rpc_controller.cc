@@ -206,6 +206,34 @@ void EthJsonRpcController::OnGetBalance(
   std::move(callback).Run(true, balance);
 }
 
+void EthJsonRpcController::GetTransactionCount(const std::string& address,
+                                               GetTxCountCallback callback) {
+  // TODO(darkdh): remove base::Unretained
+  auto internal_callback =
+      base::BindOnce(&EthJsonRpcController::OnGetTransactionCount,
+                     base::Unretained(this), std::move(callback));
+  return Request(eth_getTransactionCount(address, "latest"),
+                 std::move(internal_callback), true);
+}
+
+void EthJsonRpcController::OnGetTransactionCount(
+    GetTxCountCallback callback,
+    const int status,
+    const std::string& body,
+    const std::map<std::string, std::string>& headers) {
+  if (status < 200 || status > 299) {
+    std::move(callback).Run(false, 0);
+    return;
+  }
+  uint256_t count;
+  if (!ParseEthGetTransactionCount(body, &count)) {
+    std::move(callback).Run(false, 0);
+    return;
+  }
+
+  std::move(callback).Run(true, count);
+}
+
 bool EthJsonRpcController::GetERC20TokenBalance(
     const std::string& contract,
     const std::string& address,

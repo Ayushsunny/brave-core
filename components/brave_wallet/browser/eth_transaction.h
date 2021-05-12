@@ -18,12 +18,14 @@ FORWARD_DECLARE_TEST(EthTransactionTest, GetSignedTransaction);
 
 class EthTransaction {
  public:
+  EthTransaction();
   EthTransaction(const uint256_t& nonce,
                  const uint256_t& gas_price,
                  const uint256_t& gas_limit,
                  const EthAddress& to,
                  const uint256_t& value,
                  const std::vector<uint8_t> data);
+  EthTransaction(const EthTransaction&);
   ~EthTransaction();
 
   uint256_t nonce() const { return nonce_; }
