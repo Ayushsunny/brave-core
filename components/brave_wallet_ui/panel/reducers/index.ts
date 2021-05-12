@@ -5,9 +5,10 @@
 
 import { combineReducers } from 'redux'
 
-// Utils
-import walletPanelReducer from './wallet_panel_reducer'
+import panelReducer from './panel_reducer'
+import walletReducer from '../../common/reducers/wallet_reducer'
 
 export default combineReducers({
-  walletPanelReducer
+  panel: panelReducer,
+  wallet: walletReducer
 })
