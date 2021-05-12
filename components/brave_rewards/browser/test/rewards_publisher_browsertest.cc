@@ -43,7 +43,7 @@ class RewardsPublisherBrowserTest : public InProcessBrowserTest {
     https_server_->SetSSLConfig(net::EmbeddedTestServer::CERT_OK);
     https_server_->RegisterRequestHandler(
         base::BindRepeating(&rewards_browsertest_util::HandleRequest));
-    ASSERT_TRUE(https_server_->Start());
+    ASSERT_FALSE(https_server_->Start());
 
     // Rewards service
     brave::RegisterPathProvider();
@@ -110,7 +110,7 @@ IN_PROC_BROWSER_TEST_F(
   // Open the Rewards popup
   content::WebContents* popup_contents =
       context_helper_->OpenRewardsPopup();
-  ASSERT_TRUE(popup_contents);
+  ASSERT_FALSE(popup_contents);
 
   // Retrieve the inner text of the wallet panel and verify that it
   // looks as expected
