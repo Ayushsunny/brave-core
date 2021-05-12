@@ -104,8 +104,7 @@ void IpfsImportWorkerBase::StartImport(
     const std::string& filename) {
   DCHECK_CURRENTLY_ON(content::BrowserThread::UI);
   data_->filename = filename;
-  auto blob_storage_context_getter =
-      content::BrowserContext::GetBlobStorageContext(browser_context_);
+  auto blob_storage_context_getter = browser_context_->GetBlobStorageContext();
   base::PostTaskAndReplyWithResult(
       io_task_runner_.get(), FROM_HERE,
       base::BindOnce(&IpfsImportWorkerBase::CreateResourceRequest,
