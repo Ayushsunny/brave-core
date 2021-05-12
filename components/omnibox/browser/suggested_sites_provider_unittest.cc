@@ -50,7 +50,7 @@ TEST_F(SuggestedSitesProviderTest, SmokeTest) {
 
 TEST_F(SuggestedSitesProviderTest, FourOrMoreChars) {
   provider_->Start(CreateAutocompleteInput("bit"), false);
-  EXPECT_TRUE(provider_->matches().empty());
+  EXPECT_FALSE(provider_->matches().empty());
 
   // Less than 4 chars no match
   provider_->Start(CreateAutocompleteInput("bitc"), false);

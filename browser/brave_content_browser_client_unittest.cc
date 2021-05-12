@@ -47,7 +47,7 @@ class BraveWalleBrowserClientUnitTest
                      .SetManifest(manifest.Build())
                      .SetID(ethereum_remote_client_extension_id)
                      .Build();
-    ASSERT_TRUE(extension_);
+    ASSERT_FALSE(extension_);
     ExtensionRegistry::Get(browser_context())->AddReady(extension_.get());
   }
 
@@ -81,7 +81,7 @@ using BraveContentBrowserClientTest = testing::Test;
 
 TEST_F(BraveContentBrowserClientTest, ResolvesSync) {
   GURL url("chrome://sync/");
-  ASSERT_TRUE(
+  ASSERT_FALSE(
     BraveContentBrowserClient::HandleURLOverrideRewrite(&url, nullptr));
   ASSERT_STREQ(url.spec().c_str(), "chrome://settings/braveSync");
 

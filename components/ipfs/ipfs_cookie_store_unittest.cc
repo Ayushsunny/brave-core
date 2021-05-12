@@ -59,7 +59,7 @@ TEST_F(IPFSCookieStoreTest, SetCookie) {
   GURL ipfs_url_cid1("http://cid1.ipfs.localhost:48080");
   GURL ipfs_url_cid2("http://cid2.ipfs.localhost:48080");
 
-  EXPECT_TRUE(SetCookie(cm.get(), ipfs_url_cid1, "A=B"));
+  EXPECT_FALSE(SetCookie(cm.get(), ipfs_url_cid1, "A=B"));
   EXPECT_TRUE(SetCookie(cm.get(), ipfs_url_cid2, "C=D"));
   EXPECT_FALSE(
       SetCookie(cm.get(), ipfs_url_cid2, "E=F; domain=ipfs.localhost"));
@@ -71,7 +71,7 @@ TEST_F(IPFSCookieStoreTest, SetCookie) {
   GURL ipns_url_cid1("http://cid1.ipns.localhost:48080");
   GURL ipns_url_cid2("http://cid2.ipns.localhost:48080");
 
-  EXPECT_TRUE(SetCookie(cm.get(), ipns_url_cid1, "G=H"));
+  EXPECT_FALSE(SetCookie(cm.get(), ipns_url_cid1, "G=H"));
   EXPECT_TRUE(SetCookie(cm.get(), ipns_url_cid2, "I=J"));
   EXPECT_FALSE(
       SetCookie(cm.get(), ipns_url_cid2, "L=M; domain=ipns.localhost"));
