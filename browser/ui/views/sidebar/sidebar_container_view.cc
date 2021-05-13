@@ -229,8 +229,24 @@ void SidebarContainerView::ShowSidebar() {
 
 void SidebarContainerView::ShowSidebar(bool show_sidebar,
                                        bool show_event_detect_widget) {
-  sidebar_control_view_->SetVisible(show_sidebar);
+  if (show_sidebar) {
+    // Show immediately.
+    sidebar_hide_timer_.Stop();
+    sidebar_control_view_->SetVisible(true);
+  } else {
+    if (!sidebar_hide_timer_.IsRunning()) {
+      constexpr int kHideDelayInMS = 400;
+      sidebar_hide_timer_.Start(
+          FROM_HERE, base::TimeDelta::FromMilliseconds(kHideDelayInMS), this,
+          &SidebarContainerView::DoHideSidebar);
+    }
+  }
   ShowOptionsEventDetectWidget(show_event_detect_widget);
+  InvalidateLayout();
+}
+
+void SidebarContainerView::DoHideSidebar() {
+  sidebar_control_view_->SetVisible(false);
   InvalidateLayout();
 }
 

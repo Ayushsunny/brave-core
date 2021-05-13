@@ -9,6 +9,7 @@
 #include <memory>
 
 #include "base/scoped_observer.h"
+#include "base/timer/timer.h"
 #include "brave/browser/ui/sidebar/sidebar.h"
 #include "brave/browser/ui/sidebar/sidebar_model.h"
 #include "brave/browser/ui/views/sidebar/sidebar_show_options_event_detect_widget.h"
@@ -83,11 +84,14 @@ class SidebarContainerView
   void StartBrowserWindowEventMonitoring();
   void StopBrowserWindowEventMonitoring();
 
+  void DoHideSidebar();
+
   BraveBrowser* browser_ = nullptr;
   sidebar::SidebarModel* sidebar_model_ = nullptr;
   views::WebView* sidebar_panel_view_ = nullptr;
   SidebarControlView* sidebar_control_view_ = nullptr;
   bool initialized_ = false;
+  base::OneShotTimer sidebar_hide_timer_;
   std::unique_ptr<BrowserWindowEventObserver> browser_window_event_observer_;
   std::unique_ptr<views::EventMonitor> browser_window_event_monitor_;
   std::unique_ptr<SidebarShowOptionsEventDetectWidget> show_options_widget_;
