@@ -121,16 +121,7 @@ void WalletBalance::OnGetUnblindedTokens(
 void WalletBalance::ExternalWallets(
     type::BalancePtr balance,
     ledger::FetchBalanceCallback callback) {
-  auto wallet = ledger_->uphold()->GetWallet();
-  if (wallet) {
-    FetchBalanceUphold(std::move(balance), callback);
-    return;
-  }
-
-  wallet = ledger_->gemini()->GetWallet();
-  if (wallet) {
-    FetchBalanceGemini(std::move(balance), callback);
-  }
+  FetchBalanceUphold(std::move(balance), callback);
 }
 
 void WalletBalance::FetchBalanceUphold(type::BalancePtr balance,
@@ -205,7 +196,7 @@ void WalletBalance::OnFetchBalanceBitflyer(
     BLOG(0, "Can't get bitflyer balance");
   }
 
-  callback(result, std::move(info_ptr));
+  FetchBalanceGemini(std::move(info_ptr), callback);
 }
 
 void WalletBalance::FetchBalanceGemini(type::BalancePtr balance,
@@ -241,9 +232,8 @@ void WalletBalance::OnFetchBalanceGemini(type::Balance info,
     BLOG(0, "Can't get gemini balance");
   }
 
-  FetchBalanceBitflyer(std::move(info_ptr), callback);
+  callback(result, std::move(info_ptr));
 }
-
 
 // static
 double WalletBalance::GetPerWalletBalance(

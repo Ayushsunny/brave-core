@@ -2838,7 +2838,7 @@ void RewardsServiceImpl::OnGetExternalWallet(
 
 void RewardsServiceImpl::GetExternalWallet(GetExternalWalletCallback callback) {
   std::string wallet_type = GetExternalWalletType();
-  if (!Connected() || wallet_type == "") {
+  if (!Connected()) {
     std::move(callback).Run(ledger::type::Result::LEDGER_OK, nullptr);
     return;
   }

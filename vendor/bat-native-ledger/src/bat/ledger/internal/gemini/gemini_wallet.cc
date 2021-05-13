@@ -45,15 +45,6 @@ void GeminiWallet::Generate(ledger::ResultCallback callback) {
   ledger_->gemini()->SetWallet(wallet->Clone());
 
   if (wallet->status == type::WalletStatus::VERIFIED) {
-    // If the wallet is verified, attempt to transfer any applicable grants to
-    // the user's external wallet.
-    //
-    // For Uphold, this is accomplished by calling ledger->wallet()->ClaimFunds
-    // as the last step of the GenerateWallet flow. ClaimFunds performs both
-    // Uphold wallet linking and attempts to drain legacy Brave user funds to
-    // that linked wallet. For bitFlyer, wallet linking is performed during
-    // authorization, so bypass ClaimFunds and call promotion()->TransferTokens
-    // directly.
     ledger_->promotion()->TransferTokens(
         [callback](const type::Result result, const std::string& drain_id) {
           if (result != type::Result::LEDGER_OK) {

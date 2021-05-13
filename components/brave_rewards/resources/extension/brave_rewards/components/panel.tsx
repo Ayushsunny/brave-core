@@ -831,7 +831,7 @@ export class Panel extends React.Component<Props, State> {
     if (!this.props.onlyAnonWallet) {
       walletStatus = utils.getWalletStatus(externalWallet)
       onVerifyClick = this.verifyClicked
-      onWalletSelected = utils.handleExternalWalletLink.bind(this, this.props.actions, balance, externalWallet)
+      onWalletSelected = utils.handleExternalWalletLink.bind(this, this.props.actions, balance, null)
     }
 
     return (
