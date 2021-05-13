@@ -63,7 +63,6 @@ interface Props {
   saveShowGemini: (value: boolean) => void
   saveShowCryptoDotCom: (value: boolean) => void
   saveBrandedWallpaperOptIn: (value: boolean) => void
-  onReadBraveTodayIntroCard: () => any
   saveSetAllStackWidgets: (value: boolean) => void
 }
 
@@ -465,8 +464,8 @@ class NewTabPage extends React.Component<Props, State> {
     this.props.actions.setUserTLDAutoSet()
   }
 
-  onBraveTodayInteracting = (isInteracting: boolean) => {
-    if (isInteracting && !this.hasInitBraveToday) {
+  onBraveTodayInteracting = () => {
+    if (!this.hasInitBraveToday) {
       this.hasInitBraveToday = true
       this.props.actions.today.interactionBegin()
     }
@@ -1155,11 +1154,13 @@ class NewTabPage extends React.Component<Props, State> {
           displayedPageCount={this.props.todayData.currentPageIndex}
           publishers={this.props.todayData.publishers}
           isFetching={this.props.todayData.isFetching === true}
+          hasInteracted={this.props.todayData.hasInteracted}
           isUpdateAvailable={this.props.todayData.isUpdateAvailable}
-          isIntroDismissed={this.props.newTabData.isBraveTodayIntroDismissed}
+          isOptedIn={this.props.newTabData.isBraveTodayOptedIn}
           onRefresh={this.props.actions.today.refresh}
           onAnotherPageNeeded={this.props.actions.today.anotherPageNeeded}
           onInteracting={this.onBraveTodayInteracting}
+          onDisable={this.toggleShowToday}
           onFeedItemViewedCountChanged={this.props.actions.today.feedItemViewedCountChanged}
           // tslint:disable-next-line:jsx-no-lambda
           onCustomizeBraveToday={() => { this.openSettings(SettingsTabType.BraveToday) }}
@@ -1167,7 +1168,7 @@ class NewTabPage extends React.Component<Props, State> {
           onPromotedItemViewed={this.props.actions.today.promotedItemViewed}
           onSetPublisherPref={this.props.actions.today.setPublisherPref}
           onCheckForUpdate={this.props.actions.today.checkForUpdate}
-          onReadCardIntro={this.props.onReadBraveTodayIntroCard}
+          onOptIn={this.props.actions.today.optIn}
         />
         }
         <Settings

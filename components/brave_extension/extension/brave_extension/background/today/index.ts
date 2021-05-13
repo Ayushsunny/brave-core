@@ -4,12 +4,14 @@
 // you can obtain one at http://mozilla.org/MPL/2.0/.
 
 import * as Background from '../../../../../common/Background'
+import { getPreference } from '../../../../../common/settingsPrivate'
 import * as Feed from './feed'
 import * as Publishers from './publishers'
 import * as PublisherUserPrefs from './publisher-user-prefs'
 import { fetchResource, getUnpaddedAsDataUrl } from './privateCDN'
 
 const SETTINGS_KEY_SHOW_TODAY = 'brave.new_tab_page.show_brave_today'
+const SETTINGS_KEY_OPTED_IN = 'brave.today.opted_in'
 const ALARM_KEY_FEED_UPDATE = 'brave-today-update-feed'
 const ALARM_KEY_PUBLISHERS_UPDATE = 'brave-today-update-publishers'
 
@@ -182,11 +184,20 @@ Background.setListener<Messages.ClearPrefsResponse, Messages.ClearPrefsPayload>(
 // Only do certain things when Brave Today is enabled
 let isStartedUp = false
 
-async function conditionallyStartupOrShutdown (pref: chrome.settingsPrivate.PrefObject) {
-  if (pref.type !== chrome.settingsPrivate.PrefType.BOOLEAN) {
-    throw new Error(`Unknown pref type for '${SETTINGS_KEY_SHOW_TODAY}'. Expected BOOLEAN but saw ${pref.type}.`)
+async function conditionallyStartupOrShutdown () {
+  const prefs = await Promise.all([
+    getPreference(SETTINGS_KEY_SHOW_TODAY),
+    getPreference(SETTINGS_KEY_OPTED_IN)
+  ])
+  let isBraveTodayEnabled = true
+  for (const pref of prefs) {
+    if (pref.type !== chrome.settingsPrivate.PrefType.BOOLEAN) {
+      throw new Error(`Unknown pref type for '${pref.key}'. Expected BOOLEAN but saw ${pref.type}.`)
+    }
+    if (!pref.value) {
+      isBraveTodayEnabled = false
+    }
   }
-  const isBraveTodayEnabled = pref.value
   const hasBraveTodayBeenUsed = await getHasBraveTodayBeenUsed()
   if (isBraveTodayEnabled && hasBraveTodayBeenUsed && !isStartedUp) {
     isStartedUp = true
@@ -197,11 +208,11 @@ async function conditionallyStartupOrShutdown (pref: chrome.settingsPrivate.Pref
   }
 }
 
-chrome.settingsPrivate.getPref(SETTINGS_KEY_SHOW_TODAY, conditionallyStartupOrShutdown)
+conditionallyStartupOrShutdown()
 
 chrome.settingsPrivate.onPrefsChanged.addListener(async prefs => {
-  const pref = prefs.find(pref => pref.key === SETTINGS_KEY_SHOW_TODAY)
-  if (pref) {
-    await conditionallyStartupOrShutdown(pref)
-  }
+  // const pref = prefs.find(pref => pref.key === SETTINGS_KEY_SHOW_TODAY)
+  // if (pref) {
+    await conditionallyStartupOrShutdown()
+  // }
 })

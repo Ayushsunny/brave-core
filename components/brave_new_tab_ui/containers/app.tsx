@@ -27,10 +27,6 @@ interface Props {
   braveTodayData: BraveTodayState
 }
 
-function dismissBraveTodayIntroCard () {
-  PreferencesAPI.saveIsBraveTodayIntroDismissed(true)
-}
-
 function DefaultPage (props: Props) {
   const { newTabData, braveTodayData, gridSitesData, actions } = props
 
@@ -56,7 +52,6 @@ function DefaultPage (props: Props) {
         saveShowGemini={PreferencesAPI.saveShowGemini}
         saveShowCryptoDotCom={PreferencesAPI.saveShowCryptoDotCom}
         saveBrandedWallpaperOptIn={PreferencesAPI.saveBrandedWallpaperOptIn}
-        onReadBraveTodayIntroCard={dismissBraveTodayIntroCard}
         saveSetAllStackWidgets={PreferencesAPI.saveSetAllStackWidgets}
       />
     )

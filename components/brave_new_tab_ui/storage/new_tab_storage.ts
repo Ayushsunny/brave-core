@@ -28,7 +28,7 @@ export const defaultState: NewTab.State = {
   showCryptoDotCom: false,
   brandedWallpaperOptIn: false,
   isBrandedWallpaperNotificationDismissed: true,
-  isBraveTodayIntroDismissed: false,
+  isBraveTodayOptedIn: false,
   showEmptyPage: false,
   togetherSupported: false,
   geminiSupported: false,

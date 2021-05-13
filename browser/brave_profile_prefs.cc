@@ -299,7 +299,7 @@ void RegisterProfilePrefs(user_prefs::PrefRegistrySyncable* registry) {
 
   // Brave Today
   registry->RegisterDictionaryPref(kBraveTodaySources);
-  registry->RegisterBooleanPref(kBraveTodayIntroDismissed, false);
+  registry->RegisterBooleanPref(kBraveTodayOptedIn, false);
   registry->RegisterListPref(kBraveTodayWeeklySessionCount);
   registry->RegisterListPref(kBraveTodayWeeklyCardViewsCount);
   registry->RegisterListPref(kBraveTodayWeeklyCardVisitsCount);
