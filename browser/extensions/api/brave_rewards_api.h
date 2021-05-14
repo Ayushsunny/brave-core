@@ -40,6 +40,7 @@ class BraveRewardsUpdateMediaDurationFunction : public ExtensionFunction {
 
 class BraveRewardsGetPublisherInfoFunction : public ExtensionFunction {
  public:
+  BraveRewardsGetPublisherInfoFunction();
   DECLARE_EXTENSION_FUNCTION("braveRewards.getPublisherInfo", UNKNOWN)
 
  protected:
@@ -51,10 +52,13 @@ class BraveRewardsGetPublisherInfoFunction : public ExtensionFunction {
   void OnGetPublisherInfo(
       const ledger::type::Result result,
       ledger::type::PublisherInfoPtr info);
+
+  base::WeakPtrFactory<BraveRewardsGetPublisherInfoFunction> weak_factory_;
 };
 
 class BraveRewardsGetPublisherPanelInfoFunction : public ExtensionFunction {
  public:
+  BraveRewardsGetPublisherPanelInfoFunction();
   DECLARE_EXTENSION_FUNCTION("braveRewards.getPublisherPanelInfo", UNKNOWN)
 
  protected:
@@ -66,10 +70,13 @@ class BraveRewardsGetPublisherPanelInfoFunction : public ExtensionFunction {
   void OnGetPublisherPanelInfo(
       const ledger::type::Result result,
       ledger::type::PublisherInfoPtr info);
+
+  base::WeakPtrFactory<BraveRewardsGetPublisherPanelInfoFunction> weak_factory_;
 };
 
 class BraveRewardsSavePublisherInfoFunction : public ExtensionFunction {
  public:
+  BraveRewardsSavePublisherInfoFunction();
   DECLARE_EXTENSION_FUNCTION("braveRewards.savePublisherInfo", UNKNOWN)
 
  protected:
@@ -79,6 +86,8 @@ class BraveRewardsSavePublisherInfoFunction : public ExtensionFunction {
 
  private:
   void OnSavePublisherInfo(const ledger::type::Result result);
+
+  base::WeakPtrFactory<BraveRewardsSavePublisherInfoFunction> weak_factory_;
 };
 
 class BraveRewardsTipSiteFunction : public ExtensionFunction {
@@ -207,6 +216,7 @@ class BraveRewardsAttestPromotionFunction : public ExtensionFunction {
 class BraveRewardsGetPendingContributionsTotalFunction
     : public ExtensionFunction {
  public:
+  BraveRewardsGetPendingContributionsTotalFunction();
   DECLARE_EXTENSION_FUNCTION(
       "braveRewards.getPendingContributionsTotal", UNKNOWN)
 
@@ -217,6 +227,9 @@ class BraveRewardsGetPendingContributionsTotalFunction
 
  private:
   void OnGetPendingTotal(double amount);
+
+  base::WeakPtrFactory<BraveRewardsGetPendingContributionsTotalFunction>
+      weak_factory_;
 };
 
 class BraveRewardsSaveAdsSettingFunction : public ExtensionFunction {
@@ -254,6 +267,7 @@ class BraveRewardsGetACEnabledFunction : public ExtensionFunction {
 
 class BraveRewardsSaveRecurringTipFunction : public ExtensionFunction {
  public:
+  BraveRewardsSaveRecurringTipFunction();
   DECLARE_EXTENSION_FUNCTION("braveRewards.saveRecurringTip", UNKNOWN)
 
  protected:
@@ -263,6 +277,8 @@ class BraveRewardsSaveRecurringTipFunction : public ExtensionFunction {
 
  private:
   void OnSaveRecurringTip(bool success);
+
+  base::WeakPtrFactory<BraveRewardsSaveRecurringTipFunction> weak_factory_;
 };
 
 class BraveRewardsRemoveRecurringTipFunction :
@@ -278,6 +294,7 @@ class BraveRewardsRemoveRecurringTipFunction :
 
 class BraveRewardsGetRecurringTipsFunction : public ExtensionFunction {
  public:
+  BraveRewardsGetRecurringTipsFunction();
   DECLARE_EXTENSION_FUNCTION("braveRewards.getRecurringTips", UNKNOWN)
 
  protected:
@@ -287,6 +304,8 @@ class BraveRewardsGetRecurringTipsFunction : public ExtensionFunction {
 
  private:
     void OnGetRecurringTips(ledger::type::PublisherInfoList list);
+
+    base::WeakPtrFactory<BraveRewardsGetRecurringTipsFunction> weak_factory_;
 };
 
 class BraveRewardsGetPublisherBannerFunction : public ExtensionFunction {
@@ -434,6 +453,7 @@ class BraveRewardsGetAdsSupportedFunction : public ExtensionFunction {
 class BraveRewardsGetAnonWalletStatusFunction
     : public ExtensionFunction {
  public:
+  BraveRewardsGetAnonWalletStatusFunction();
   DECLARE_EXTENSION_FUNCTION("braveRewards.getAnonWalletStatus", UNKNOWN)
 
  protected:
@@ -443,6 +463,8 @@ class BraveRewardsGetAnonWalletStatusFunction
 
  private:
   void OnGetAnonWalletStatus(const ledger::type::Result result);
+
+  base::WeakPtrFactory<BraveRewardsGetAnonWalletStatusFunction> weak_factory_;
 };
 
 class BraveRewardsIsInitializedFunction : public ExtensionFunction {

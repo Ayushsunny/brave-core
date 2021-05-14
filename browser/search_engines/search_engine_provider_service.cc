@@ -1,8 +1,11 @@
-/* This Source Code Form is subject to the terms of the Mozilla Public
+/* Copyright (c) 2018 The Brave Authors. All rights reserved.
+ * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 #include "brave/browser/search_engines/search_engine_provider_service.h"
+
+#include <vector>
 
 #include "brave/browser/search_engines/search_engine_provider_util.h"
 #include "brave/common/pref_names.h"
@@ -25,8 +28,8 @@ SearchEngineProviderService::SearchEngineProviderService(
   use_alternative_search_engine_provider_.Init(
       kUseAlternativeSearchEngineProvider,
       otr_profile_->GetOriginalProfile()->GetPrefs(),
-      base::Bind(&SearchEngineProviderService::OnPreferenceChanged,
-                 base::Unretained(this)));
+      base::BindRepeating(&SearchEngineProviderService::OnPreferenceChanged,
+                          base::Unretained(this)));
 
   std::vector<TemplateURLPrepopulateData::BravePrepopulatedEngineID>
       alt_search_providers = {
