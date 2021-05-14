@@ -68,9 +68,11 @@ class Rewards extends React.PureComponent<RewardsProps, {}> {
 
     const rate = parameters.rate || 0.0
     const showEnableAds = !enabledAds && adsSupported
-    const amount = adsAccountStatement ? adsAccountStatement.estimatedPendingRewards : 0
+    const amount = adsAccountStatement ? adsAccountStatement.earningsThisMonth : 0
     const converted = convertBalance(amount, rate)
     const batFormatString = onlyAnonWallet ? getLocale('rewardsWidgetBap') : getLocale('rewardsWidgetBat')
+
+    // TODO(zenparsing): Render a "BAT arriving soon" notice using estimatedRewardsPending
 
     return (
       <AmountItem isActionPrompt={!!showEnableAds} isLast={false}>

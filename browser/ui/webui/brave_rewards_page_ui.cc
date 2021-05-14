@@ -1428,6 +1428,7 @@ void RewardsDOMHandler::OnGetStatement(const bool success,
   }
 
   history.SetInteger("adsReceivedThisMonth", ads_received_this_month);
+  history.SetDouble("adsEarningsThisMonth", earnings_this_month);
 
   CallJavascriptFunction("brave_rewards.statement", history);
 }

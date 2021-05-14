@@ -227,6 +227,7 @@ declare namespace Rewards {
     adsEstimatedPendingRewards: number
     adsNextPaymentDate: string
     adsReceivedThisMonth: number
+    adsEarningsThisMonth: number
   }
 
   export enum RewardsType {
