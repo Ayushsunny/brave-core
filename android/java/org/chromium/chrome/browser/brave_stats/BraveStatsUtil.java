@@ -171,26 +171,21 @@ public class BraveStatsUtil {
     }
 
     public static void shareStatsAction(View view) {
-        Log.d("CRASHING", "shareStatsAction :");
         try {
             Context context = ContextUtils.getApplicationContext();
             Bitmap bmp = convertToBitmap(view);
-            // ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-            // bmp.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-            Log.d("CRASHING", "getting path :");
             
             String path = "";
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 path = MediaStore.Images.Media.insertImage(
-                    context.getContentResolver(), bmp, "tempimage", null);Log.d("CRASHING", "path :"+path);
+                    context.getContentResolver(), bmp, "tempimage", null);
             } else {
                 storeImage(bmp);
                 path = getOutputMediaFile().getAbsolutePath();
             }
-            Log.d("CRASHING", "path:"+getOutputMediaFile().getPath());
-            Log.d("CRASHING", "path:"+getOutputMediaFile().getAbsolutePath());
-            Uri uri = Uri.parse(path);Log.d("CRASHING", "uri :"+uri);
+
+            Uri uri = Uri.parse(path);
 
             Intent sendIntent = new Intent();
             sendIntent.setAction(Intent.ACTION_SEND);
@@ -204,15 +199,15 @@ public class BraveStatsUtil {
             shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(shareIntent);
         } catch (Exception e){
-            Log.d("CRASHING", "exception :"+e);
+            Log.e("CRASHING", "exception :"+e);
         }
     }
 
     private static void storeImage(Bitmap image) {
         File pictureFile = getOutputMediaFile();
         if (pictureFile == null) {
-            Log.d("CRASHING",
-                    "Error creating media file, check storage permissions: ");// e.getMessage());
+            Log.e("CRASHING",
+                    "Error creating media file, check storage permissions: ");
             return;
         }
         try {
@@ -220,31 +215,25 @@ public class BraveStatsUtil {
             image.compress(Bitmap.CompressFormat.PNG, 90, fos);
             fos.close();
         } catch (FileNotFoundException e) {
-            Log.d("CRASHING", "File not found: " + e.getMessage());
+            Log.e("CRASHING", "File not found: " + e.getMessage());
         } catch (IOException e) {
-            Log.d("CRASHING", "Error accessing file: " + e.getMessage());
+            Log.e("CRASHING", "Error accessing file: " + e.getMessage());
         }
     }
 
         /** Create a File for saving an image or video */
     private static File getOutputMediaFile(){
-        // To be safe, you should check that the SDCard is mounted
-        // using Environment.getExternalStorageState() before doing this.
         File mediaStorageDir = new File(Environment.getExternalStorageDirectory()
                 + "/Android/data/"
                 + ContextUtils.getApplicationContext().getPackageName()
                 + "/Files");
 
-        // This location works best if you want the created images to be shared
-        // between applications and persist after your app has been uninstalled.
-
-        // Create the storage directory if it does not exist
         if (! mediaStorageDir.exists()){
             if (! mediaStorageDir.mkdirs()){
                 return null;
             }
         }
-        // Create a media file name
+
         File mediaFile;
         String mImageName="share_stats.jpg";
         mediaFile = new File(mediaStorageDir.getPath() + File.separator + mImageName);
